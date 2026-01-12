@@ -1,0 +1,7 @@
+{
+  "name": "NYAAYa-Sahayak",
+  "description": "A high-fidelity AI legal assistant prototype for the Indian Judiciary, featuring a citizen kiosk (Sahayak) and a lawyer co-pilot (NYAAYa-Expert).",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}

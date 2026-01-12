@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NYAAY SAHAYAK | Legal Intelligence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gold: '#c5a059',
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://js.puter.com/v2/"></script>
+    <script src="https://js.puter.com/v2/"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            /* DEFAULT (Gold/Premium) */
+            --legal-black: #0f172a;
+            --legal-white: #ffffff;
+            --legal-gold: #d4af37;
+            /* Richer Gold */
+            --legal-gold-glow: rgba(212, 175, 55, 0.4);
+            --legal-bg: #f8fafc;
+            --legal-accent: #f1f5f9;
+            --legal-surface: rgba(255, 255, 255, 0.7);
+            --legal-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
+        }
+
+        /* LIGHT Theme Removed as per user request (kept only Gold/Dark) */
+
+        :root[data-theme="dark"] {
+            /* DARK (Midnight Luxury) */
+            --legal-black: #f8fafc;
+            /* Text becomes white/white-ish */
+            --legal-white: #020617;
+            /* Surfaces become deep midnight */
+            --legal-gold: #fbbf24;
+            /* Brighter gold for dark mode constrast */
+            --legal-gold-glow: rgba(251, 191, 36, 0.3);
+            --legal-bg: #000000;
+            /* Proper AMOLED/Deep Black */
+            --legal-accent: #0f172a;
+            /* Slate 900 for secondary backgrounds */
+            --legal-surface: rgba(2, 6, 23, 0.7);
+            /* Glassy midnight */
+            --legal-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8);
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: var(--legal-bg);
+            margin: 0;
+            padding: 0;
+            color: var(--legal-black);
+            -webkit-font-smoothing: antialiased;
+            overflow: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
+            background-image:
+                radial-gradient(circle at 10% 10%, var(--legal-accent) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, var(--legal-accent) 0%, transparent 40%);
+        }
+
+        .serif-heading {
+            font-family: 'EB Garamond', serif;
+            letter-spacing: -0.02em;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .animate-scale-in {
+            animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Modern Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+            /* Wider area to allow for padding effect */
+            height: 12px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--legal-gold);
+            border: 4px solid transparent;
+            /* Significant transparent border creates 'floating' look */
+            background-clip: content-box;
+            border-radius: 99px;
+            opacity: 0.8;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+            margin-block: 6px;
+            /* Keep away from top/bottom rounded corners */
+        }
+
+        /* Glassmorphism Utility */
+        .glass-panel {
+            background: var(--legal-surface);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--legal-shadow);
+        }
+    </style>
+    <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.34.0"
+  }
+}
+</script>
+    <link rel="stylesheet" href="/index.css">
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+</body>
+
+</html>

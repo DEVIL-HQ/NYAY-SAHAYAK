@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Voice Test</title>
+</head>
+
+<body>
+    <h1>Browser Voice Tester</h1>
+    <p>Loading voices...</p>
+    <div style="padding: 20px; background: #eee; margin-bottom: 20px;">
+        <textarea id="textData" rows="4" cols="50">नमस्ते, यह एक परीक्षण है। (Hello, this is a test.)</textarea><br>
+        <button onclick="testVoice()">Speak Selected Voice</button>
+    </div>
+    <ul id="voiceList"></ul>
+
+    <script>
+        let availableVoices = [];
+
+        function listVoices() {
+            availableVoices = window.speechSynthesis.getVoices();
+            const list = document.getElementById('voiceList');
+            list.innerHTML = '';
+
+            if (availableVoices.length === 0) {
+                list.innerHTML = '<li>No voices found yet (try refreshing)</li>';
+                return;
+            }
+
+            availableVoices.forEach((voice, index) => {
+                const li = document.createElement('li');
+                li.style.padding = '5px';
+                li.style.borderBottom = '1px solid #ccc';
+
+                const btn = document.createElement('button');
+                btn.innerText = "Test";
+                btn.onclick = () => speak(index);
+
+                const span = document.createElement('span');
+                span.style.fontWeight = 'bold';
+                span.innerText = ` ${voice.name} (${voice.lang}) `;
+
+                if (voice.default) span.innerText += " [DEFAULT]";
+
+                li.appendChild(btn);
+                li.appendChild(span);
+                list.appendChild(li);
+            });
+        }
+
+        function speak(index) {
+            const text = document.getElementById('textData').value;
+            const utt = new SpeechSynthesisUtterance(text);
+            utt.voice = availableVoices[index];
+            utt.lang = availableVoices[index].lang;
+            console.log("Testing voice:", availableVoices[index].name);
+            window.speechSynthesis.speak(utt);
+        }
+
+        window.speechSynthesis.onvoiceschanged = listVoices;
+        setTimeout(listVoices, 500);
+    </script>
+</body>
+
+</html>
