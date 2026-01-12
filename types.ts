@@ -2,7 +2,7 @@
 export type AppMode = 'SAHAYAK' | 'EXPERT';
 export type UserRole = 'CITIZEN' | 'PROFESSIONAL' | null;
 
-export type Language = 'EN' | 'HI' | 'BN' | 'TE' | 'MR';
+export type Language = 'EN' | 'HI' | 'BN' | 'TE' | 'MR' | 'GU' | 'TA' | 'KN' | 'PA' | 'BH';
 
 export interface GroundingChunk {
   web?: {

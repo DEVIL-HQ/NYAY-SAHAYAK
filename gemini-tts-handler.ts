@@ -76,9 +76,16 @@ export const speakWithGemini = async (text: string, langCode: string = 'EN'): Pr
         }
     };
 
-    // We send the text as a user message part
+    // We send the text as a user message part with explicit instruction to READ it
+    const langNames: Record<string, string> = {
+        'EN': 'English', 'HI': 'Hindi', 'BN': 'Bengali', 'TE': 'Telugu', 'MR': 'Marathi',
+        'GU': 'Gujarati', 'TA': 'Tamil', 'KN': 'Kannada', 'PA': 'Punjabi', 'BH': 'Bhojpuri'
+    };
+    const langName = langNames[langCode] || 'English';
+    const prompt = `Please read the following text aloud exactly as written, in ${langName} language. Do not add any conversational filler. Text: "${text}"`;
+
     const content = {
-        parts: [{ text: text }]
+        parts: [{ text: prompt }]
     };
 
     console.log(`[Gemini TTS] Generating speech for: "${text.substring(0, 50)}..."`);

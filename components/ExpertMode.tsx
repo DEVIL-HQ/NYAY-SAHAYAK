@@ -344,26 +344,16 @@ const ExpertMode: React.FC<ExpertModeProps> = ({ language }) => {
           <div className="flex items-center space-x-2">
 
             {/* Conditional Button: Profile OR Register */}
-            {currentUser ? (
-              <button
-                onClick={() => setShowProfile(true)}
-                className="p-2 border border-white/20 rounded-lg text-white/60 hover:text-gold hover:bg-white/10 transition-all group lg:flex items-center space-x-2 hidden"
-                title="View Profile"
-              >
-                <span>{ICONS.USERS}</span>
-                <span className="text-[10px] font-bold uppercase pr-2">Advocate Profile</span>
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse ml-1"></div>
-              </button>
-            ) : (
-              <button
-                onClick={() => setShowRegistration(true)}
-                className="p-2 border border-white/20 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-all group lg:flex items-center space-x-2 hidden"
-                title="Lawyer Registration"
-              >
-                <span>{ICONS.USERS}</span>
-                <span className="text-[10px] font-bold uppercase pr-2">Register Advocate</span>
-              </button>
-            )}
+            {/* User Request: Replace 'Advocate Profile' with 'Register' to ensure registration visibility */}
+            <button
+              onClick={() => setShowRegistration(true)}
+              className="p-2 border border-white/20 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-all group lg:flex items-center space-x-2 hidden"
+              title="Register as Professional"
+            >
+              <span>{ICONS.USERS}</span>
+              <span className="text-[10px] font-bold uppercase pr-2">Register as Advocate</span>
+              <div className="w-2 h-2 bg-gold rounded-full animate-pulse ml-1"></div>
+            </button>
 
             <button
               onClick={handleRefresh}

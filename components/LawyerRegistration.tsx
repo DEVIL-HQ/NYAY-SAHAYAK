@@ -55,9 +55,11 @@ const LawyerRegistration: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             }, profileImage || undefined, idCard || undefined);
 
             setSuccess(true);
-            setTimeout(() => {
-                onBack();
-            }, 2000);
+            setSuccess(true);
+            // Auto redirect removed to show Profile Card as requested
+            // setTimeout(() => {
+            //     onBack();
+            // }, 2000);
         } catch (error) {
             alert("Registration failed. Please try again.");
         } finally {
@@ -67,12 +69,33 @@ const LawyerRegistration: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
     if (success) {
         return (
-            <div className="flex flex-col items-center justify-center h-full p-8 animate-fade-in text-center">
-                <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center text-4xl text-green-600 mb-6">
-                    {ICONS.CHECK}
+            <div className="flex flex-col items-center justify-center h-full p-8 animate-fade-in">
+                {/* Advocate Profile Card */}
+                <div className="bg-[#0b0f19] border border-slate-800 rounded-2xl p-4 flex items-center justify-between w-full max-w-sm shadow-xl relative overflow-hidden group hover:border-[var(--legal-gold)]/30 transition-all">
+                    <div className="flex items-center gap-4 relative z-10">
+                        {/* Icon Container */}
+                        <div className="w-10 h-10 rounded-full bg-transparent border border-gray-600 flex items-center justify-center text-gray-400">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        </div>
+                        {/* Text */}
+                        <span className="text-sm font-bold tracking-widest text-[#5c8bc0] uppercase" style={{ textShadow: '0 0 10px rgba(92, 139, 192, 0.3)' }}>
+                            Advocate Profile
+                        </span>
+                    </div>
+
+                    {/* Green Status Dot */}
+                    <div className="relative">
+                        <div className="w-3 h-3 bg-green-500 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.8)] animate-pulse"></div>
+                    </div>
                 </div>
-                <h2 className="text-2xl font-bold mb-2 text-white">Registration Successful!</h2>
-                <p className="text-slate-500">Your profile is under verification. You will be redirected shortly.</p>
+
+                <div className="mt-8 text-center space-y-4">
+                    <h2 className="text-2xl font-bold text-white">Registration Successful!</h2>
+                    <p className="text-slate-400 text-sm">Welcome to the Nyaay Sahayak Network.</p>
+                    <button onClick={onBack} className="px-6 py-2 bg-[var(--legal-gold)] text-black font-bold rounded-full text-xs uppercase hover:bg-yellow-500 transition-colors">
+                        Proceed to Dashboard
+                    </button>
+                </div>
             </div>
         );
     }

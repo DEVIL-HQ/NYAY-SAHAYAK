@@ -597,9 +597,9 @@ const SahayakMode: React.FC<{ language: Language; userKey: string | null; onList
 
               <div className="text-center space-y-8 max-w-xl w-full">
                 <div className="space-y-2">
-                  <h3 className="text-3xl sm:text-4xl font-serif italic text-[var(--legal-black)] drop-shadow-sm flex flex-col items-center gap-2">
-                    <span>{state === 'LISTENING' ? t.label_listening : t.label_thinking}</span>
-                    <span className="animate-pulse text-[var(--legal-gold)] text-5xl leading-[0] mt-2">{dots}</span>
+                  <h3 className="text-3xl sm:text-4xl font-serif italic text-[var(--legal-black)]">
+                    {state === 'LISTENING' ? t.label_listening : t.label_thinking}
+                    <span className="animate-pulse">{dots}</span>
                   </h3>
                   <p className="text-xs font-bold text-[var(--legal-gold)] uppercase tracking-widest">{currentLangConfig?.native} Interface</p>
                 </div>
@@ -812,7 +812,6 @@ const SahayakMode: React.FC<{ language: Language; userKey: string | null; onList
                           stopAudio();
                           setTextInput('');
                           setContextData('');
-                          setState('IDLE'); // Reset to Main Page (IDLE state)
                         }}
                         className="w-full px-6 py-3 bg-[var(--legal-gold)] text-[var(--legal-black)] rounded-xl text-xs font-black uppercase tracking-wider shadow-lg hover:bg-yellow-500 transition-all active:scale-95 whitespace-nowrap"
                       >

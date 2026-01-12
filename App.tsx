@@ -83,7 +83,7 @@ const App: React.FC = () => {
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-[var(--legal-bg)] text-[var(--legal-black)] selection:bg-[var(--legal-gold)]/30 transaction-colors duration-300">
       {/* Premium Glass Header */}
-      <nav className="flex flex-col border-b border-[var(--legal-accent)] z-50 bg-[var(--legal-white)]/80 backdrop-blur-md transition-colors duration-300">
+      <nav className={`flex flex-col border-b border-[var(--legal-accent)] z-50 transition-colors duration-300 ${theme === 'DARK' ? 'bg-slate-950/90 backdrop-blur-md' : 'bg-white/90 backdrop-blur-md'}`}>
         <div className="relative flex flex-wrap md:flex-nowrap items-center justify-between px-6 sm:px-10 py-4">
           <div className="flex items-center space-x-3">
             <div className={`w-10 h-10 rounded-2xl flex items-center justify-center animate-pulse shadow-xl transition-colors ${theme === 'DARK' ? 'bg-white text-black' : 'bg-black text-[var(--legal-gold)]'}`}>
@@ -136,15 +136,18 @@ const App: React.FC = () => {
               )}
             </div>
 
-            {/* Refined Theme Toggle (Pill Switch) */}
+            {/* Premium Circular Theme Toggle */}
             <button
               onClick={cycleTheme}
-              className={`relative w-14 h-8 rounded-full transition-all duration-500 shadow-inner flex items-center px-1 ${theme === 'DARK' ? 'bg-slate-800' : 'bg-slate-200'}`}
-              title="Toggle Day/Night Mode"
+              className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 shadow-sm border border-transparent hover:shadow-md hover:scale-105 active:scale-95 ${theme === 'DARK' ? 'bg-slate-800 text-yellow-400 border-slate-700/50' : 'bg-white text-orange-500 border-slate-200'}`}
+              title="Toggle Theme"
             >
-              {/* Sliding Knob */}
-              <div className={`absolute w-6 h-6 rounded-full shadow-md transform transition-transform duration-500 flex items-center justify-center ${theme === 'DARK' ? 'translate-x-[22px] bg-[var(--legal-black)]' : 'translate-x-0 bg-white'}`}>
-                {theme === 'DARK' ? <span className="text-[10px]">🌙</span> : <span className="text-[10px]">☀️</span>}
+              <div className={`transform transition-transform duration-500 ${theme === 'DARK' ? 'rotate-180' : 'rotate-0'}`}>
+                {theme === 'DARK' ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                )}
               </div>
             </button>
 

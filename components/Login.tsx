@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ICONS } from '../constants';
+import LawyerRegistration from './LawyerRegistration';
 import { UserRole } from '../types';
 
 interface LoginProps {
@@ -21,6 +22,7 @@ const saveUserToDB = (mobile: string, role: string, userData: any) => {
 
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
     const [activeTab, setActiveTab] = useState<'CITIZEN' | 'PROFESSIONAL'>('CITIZEN');
+    const [view, setView] = useState<'SELECTION' | 'AUTH'>('SELECTION');
     const [isRegistering, setIsRegistering] = useState(false); // Toggle between Login/Register
 
     // Form States
@@ -28,9 +30,8 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [name, setName] = useState('');
-    const [aadhaar, setAadhaar] = useState('');
+    const [age, setAge] = useState('');
 
-    // Flow States
     // Flow States
     const [showOtp, setShowOtp] = useState(false);
     const [otp, setOtp] = useState('');
@@ -45,6 +46,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
     // Admin Panel State
     const [showAdmin, setShowAdmin] = useState(false);
+    const [showLawyerReg, setShowLawyerReg] = useState(false);
 
     // Simulated System Alert (Non-blocking)
     const [systemAlert, setSystemAlert] = useState<{ show: boolean, message: string } | null>(null);
@@ -76,7 +78,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         setPassword('');
         setConfirmPassword('');
         setName('');
-        setAadhaar('');
+        setAge('');
         setOtp('');
         setShowOtp(false);
         setTempRegData(null);
@@ -93,7 +95,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         if (password !== confirmPassword) return showNotify("Passwords do not match.", 'error');
         if (activeTab === 'PROFESSIONAL') {
             if (!name) return showNotify("Name is required.", 'error');
-            if (aadhaar.length < 12) return showNotify("Valid Aadhaar required.", 'error');
+            if (!age || parseInt(age) < 18) return showNotify("You must be 18+ to register.", 'error');
         }
 
         setLoading(true);
@@ -113,7 +115,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                 password,
                 role: activeTab,
                 name: name || "Citizen",
-                aadhaar: aadhaar || ""
+                age: age || ""
             });
 
             // Generate Random OTP
@@ -198,8 +200,13 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                     // Auto Login - use the composite key
                     const userKey = `${tempRegData.role}_${tempRegData.mobile}`;
 
-                    // Short delay for user to see success msg
-                    setTimeout(() => onLogin(tempRegData.role, userKey), 1000);
+                    // If Professional, show Lawyer Registration Form instead of direct login
+                    if (tempRegData.role === 'PROFESSIONAL') {
+                        setTimeout(() => setShowLawyerReg(true), 800);
+                    } else {
+                        // Citizen: Direct Login
+                        setTimeout(() => onLogin(tempRegData.role, userKey), 1000);
+                    }
 
                 } else {
                     // FINALIZE LOGIN
@@ -251,7 +258,19 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             <div className="w-full max-w-md bg-white rounded-3xl shadow-xl overflow-hidden animate-fade-in-up relative z-10 max-h-[85vh] overflow-y-auto custom-scrollbar">
 
                 {/* Header */}
-                <div className="p-8 pb-6 text-center border-b border-slate-100">
+                <div className="p-8 pb-6 text-center border-b border-slate-100 relative">
+                    {/* Back Button for Auth View */}
+                    {view === 'AUTH' && !showOtp && (
+                        <button
+                            onClick={() => { setView('SELECTION'); resetForm(); }}
+                            className="absolute left-6 top-8 text-slate-400 hover:text-slate-900 transition-colors"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                            </svg>
+                        </button>
+                    )}
+
                     <div className="w-16 h-16 bg-[var(--legal-black)] text-[var(--legal-gold)] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                         {ICONS.SCALE}
                     </div>
@@ -259,210 +278,227 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                         <span>NYAAY</span>
                         <span>SAHAYAK</span>
                     </h1>
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-2">{activeTab === 'PROFESSIONAL' ? "Legal Professional Access" : "Secure Citizen Access"}</p>
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-2">
+                        {view === 'SELECTION' ? 'Choose Your Portal' : (activeTab === 'PROFESSIONAL' ? "Legal Professional Access" : "Secure Citizen Access")}
+                    </p>
                 </div>
 
-                {/* Tab Switcher */}
-                {/* Tab Switcher */}
-                <div className="flex p-2 bg-slate-50 mx-6 mt-6 rounded-2xl border border-slate-200">
-                    {showOtp ? (
-                        <div className="w-full py-3 text-[10px] font-black uppercase tracking-wider rounded-xl bg-slate-100 text-slate-500 border border-slate-100 text-center flex items-center justify-center gap-2">
-                            <span>Locked: {activeTab} Verification</span>
+                {view === 'SELECTION' ? (
+                    // ---------------- VIEW: SELECTION ----------------
+                    <div className="p-8 space-y-4">
+                        <button
+                            onClick={() => { setActiveTab('CITIZEN'); setView('AUTH'); setIsRegistering(false); }}
+                            className="w-full bg-slate-50 border-2 border-slate-100 hover:border-[var(--legal-gold)] rounded-2xl p-6 flex flex-col items-center gap-3 group transition-all"
+                        >
+                            <div className="p-3 bg-white rounded-full shadow-sm group-hover:scale-110 transition-transform text-slate-700">
+                                {ICONS.USER_VOICE}
+                            </div>
+                            <div className="text-center">
+                                <h3 className="text-sm font-black uppercase text-slate-800">Citizen Portal</h3>
+                                <p className="text-[10px] text-slate-400 font-medium">Get Legal Assistance & Info</p>
+                            </div>
+                        </button>
+
+                        <button
+                            onClick={() => { setActiveTab('PROFESSIONAL'); setView('AUTH'); setIsRegistering(false); }}
+                            className="w-full bg-slate-50 border-2 border-slate-100 hover:border-black rounded-2xl p-6 flex flex-col items-center gap-3 group transition-all"
+                        >
+                            <div className="p-3 bg-white rounded-full shadow-sm group-hover:scale-110 transition-transform text-slate-700">
+                                {ICONS.GAVEL}
+                            </div>
+                            <div className="text-center">
+                                <h3 className="text-sm font-black uppercase text-slate-800">Professional Portal</h3>
+                                <p className="text-[10px] text-slate-400 font-medium">For Advocates & Legal Experts</p>
+                            </div>
+                        </button>
+
+                        <div className="mt-4 text-center">
+                            <p className="text-[9px] text-slate-400 px-6">Select the appropriate portal to continue to secure login or registration.</p>
                         </div>
-                    ) : (
-                        <>
-                            <button
-                                onClick={() => { setActiveTab('CITIZEN'); resetForm(); }}
-                                className={`flex-1 py-3 text-[10px] font-black uppercase tracking-wider rounded-xl transition-all ${activeTab === 'CITIZEN' ? 'bg-white text-slate-900 shadow-sm border border-slate-100' : 'text-slate-400 hover:text-slate-600'}`}
-                            >
-                                Citizen
-                            </button>
-                            <button
-                                onClick={() => { setActiveTab('PROFESSIONAL'); resetForm(); }}
-                                className={`flex-1 py-3 text-[10px] font-black uppercase tracking-wider rounded-xl transition-all ${activeTab === 'PROFESSIONAL' ? 'bg-white text-slate-900 shadow-sm border border-slate-100' : 'text-slate-400 hover:text-slate-600'}`}
-                            >
-                                Professional
-                            </button>
-                        </>
-                    )}
-                </div>
+                    </div>
+                ) : (
+                    // ---------------- VIEW: AUTH ----------------
+                    // Form Body
+                    <div className="p-8 pt-6">
+                        {/* OTP Screen (Final Step) */}
+                        {showOtp ? (
+                            <form onSubmit={handleVerifyOtp} className="space-y-6 animate-fade-in">
+                                <div className="text-center mb-2">
+                                    <p className="text-sm font-bold text-slate-900">Verify One-Time Password</p>
+                                    <p className="text-xs text-slate-400 mt-1">Sent to {mobile}</p>
 
-                {/* Form Body */}
-                <div className="p-8 pt-6">
+                                    <div className="mt-2 text-center">
+                                        {otpTimer > 0 ? (
+                                            <span className={`text-[10px] font-black px-2 py-1 rounded-full ${otpTimer > 10 ? 'bg-slate-100 text-slate-500' : 'bg-red-50 text-red-500'}`}>
+                                                Expires in 00:{otpTimer.toString().padStart(2, '0')}
+                                            </span>
+                                        ) : (
+                                            <button
+                                                type="button"
+                                                onClick={handleResendOtp}
+                                                className="text-[10px] font-black uppercase text-[var(--legal-gold)] bg-black px-3 py-1.5 rounded-full hover:bg-slate-800 transition-colors animate-pulse"
+                                            >
+                                                Resend Code ↻
+                                            </button>
+                                        )}
+                                    </div>
 
-                    {/* OTP Screen (Final Step) */}
-                    {showOtp ? (
-                        <form onSubmit={handleVerifyOtp} className="space-y-6 animate-fade-in">
-                            <div className="text-center mb-2">
-                                <p className="text-sm font-bold text-slate-900">Verify One-Time Password</p>
-                                <p className="text-xs text-slate-400 mt-1">Sent to {mobile}</p>
-
-                                <div className="mt-2 text-center">
-                                    {otpTimer > 0 ? (
-                                        <span className={`text-[10px] font-black px-2 py-1 rounded-full ${otpTimer > 10 ? 'bg-slate-100 text-slate-500' : 'bg-red-50 text-red-500'}`}>
-                                            Expires in 00:{otpTimer.toString().padStart(2, '0')}
-                                        </span>
-                                    ) : (
-                                        <button
-                                            type="button"
-                                            onClick={handleResendOtp}
-                                            className="text-[10px] font-black uppercase text-[var(--legal-gold)] bg-black px-3 py-1.5 rounded-full hover:bg-slate-800 transition-colors animate-pulse"
-                                        >
-                                            Resend Code ↻
-                                        </button>
-                                    )}
+                                    {isRegistering && <p className="text-[10px] text-amber-600 font-bold mt-2 bg-amber-50 inline-block px-2 py-0.5 rounded">Completing Registration</p>}
                                 </div>
 
-                                {isRegistering && <p className="text-[10px] text-amber-600 font-bold mt-2 bg-amber-50 inline-block px-2 py-0.5 rounded">Completing Registration</p>}
-                            </div>
-
-                            <div className="flex justify-center">
-                                <input
-                                    type="text"
-                                    maxLength={4}
-                                    value={otp}
-                                    onChange={(e) => setOtp(e.target.value)}
-                                    className="w-40 text-center text-3xl font-black tracking-widest py-3 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:border-[var(--legal-gold)] transition-all placeholder:text-slate-200"
-                                    placeholder="••••"
-                                    autoFocus
-                                />
-                            </div>
-
-                            <button
-                                type="submit"
-                                disabled={loading || otpTimer === 0}
-                                className="w-full py-4 bg-[var(--legal-black)] text-[var(--legal-gold)] rounded-xl text-xs font-black uppercase tracking-widest hover:bg-slate-800 active:scale-[0.98] transition-all shadow-lg disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                            >
-                                {loading ? <span className="w-4 h-4 border-2 border-[var(--legal-gold)] border-t-transparent rounded-full animate-spin" /> : ICONS.UNLOCK}
-                                {!loading && (otpTimer === 0 ? "OTP Expired" : (isRegistering ? "Verify & Create Account" : "Verify & Login"))}
-                            </button>
-
-                            <div className="text-center">
-                                <button
-                                    type="button"
-                                    onClick={() => setShowOtp(false)}
-                                    className="text-[10px] font-bold uppercase text-slate-400 hover:text-slate-600 transition-colors"
-                                >
-                                    Back
-                                </button>
-                            </div>
-                        </form>
-                    ) : (
-                        // Register / Login Form
-                        <form onSubmit={isRegistering ? handleRegisterStep1 : handleLoginStep1} className="space-y-5 animate-fade-in">
-
-                            <div className="text-center mb-4">
-                                <h2 className="text-lg font-bold text-slate-800">{isRegistering ? "Create Account" : "Welcome Back"}</h2>
-                            </div>
-
-                            {/* Extra Logic for Registering */}
-                            {isRegistering && (
-                                <>
-                                    {/* Name */}
-                                    {(activeTab === 'PROFESSIONAL' || isRegistering) && (
-                                        <div className="space-y-1">
-                                            <label className="text-[10px] font-bold uppercase text-slate-400 pl-2">Full Name</label>
-                                            <input
-                                                type="text"
-                                                value={name}
-                                                onChange={(e) => setName(e.target.value)}
-                                                placeholder="Enter full name"
-                                                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 focus:outline-none focus:border-[var(--legal-gold)] transition-colors"
-                                                required={activeTab === 'PROFESSIONAL'}
-                                            />
-                                        </div>
-                                    )}
-
-                                    {/* Aadhaar (Pro Only) */}
-                                    {activeTab === 'PROFESSIONAL' && (
-                                        <div className="space-y-1">
-                                            <label className="text-[10px] font-bold uppercase text-slate-400 pl-2">Aadhaar Number</label>
-                                            <input
-                                                type="text"
-                                                value={aadhaar}
-                                                onChange={(e) => setAadhaar(e.target.value.replace(/\D/g, '').slice(0, 12))}
-                                                placeholder="12-digit UID"
-                                                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 focus:outline-none focus:border-[var(--legal-gold)] transition-colors"
-                                                required
-                                            />
-                                        </div>
-                                    )}
-                                </>
-                            )}
-
-
-                            {/* Mobile Number (Common) */}
-                            <div className="space-y-1">
-                                <label className="text-[10px] font-bold uppercase text-slate-400 pl-2">Mobile Number</label>
-                                <div className="relative">
-                                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                                    </div>
+                                <div className="flex justify-center">
                                     <input
-                                        type="tel"
-                                        value={mobile}
-                                        onChange={(e) => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                                        placeholder="999-999-9999"
-                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-sm font-bold text-slate-900 focus:outline-none focus:border-[var(--legal-gold)] transition-colors"
-                                        required
+                                        type="text"
+                                        maxLength={4}
+                                        value={otp}
+                                        onChange={(e) => setOtp(e.target.value)}
+                                        className="w-40 text-center text-3xl font-black tracking-widest py-3 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:border-[var(--legal-gold)] transition-all placeholder:text-slate-200 text-slate-900"
+                                        placeholder="••••"
+                                        autoFocus
                                     />
                                 </div>
-                            </div>
 
-                            {/* Password */}
-                            <div className="space-y-1">
-                                <label className="text-[10px] font-bold uppercase text-slate-400 pl-2">Password</label>
-                                <input
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    placeholder={isRegistering ? "Create Valid Password" : "Enter Password"}
-                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 focus:outline-none focus:border-[var(--legal-gold)] transition-colors"
-                                    required
-                                />
-                            </div>
+                                <button
+                                    type="submit"
+                                    disabled={loading || otpTimer === 0}
+                                    className="w-full py-4 bg-[var(--legal-black)] text-[var(--legal-gold)] rounded-xl text-xs font-black uppercase tracking-widest hover:bg-slate-800 active:scale-[0.98] transition-all shadow-lg disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                                >
+                                    {loading ? <span className="w-4 h-4 border-2 border-[var(--legal-gold)] border-t-transparent rounded-full animate-spin" /> : ICONS.UNLOCK}
+                                    {!loading && (otpTimer === 0 ? "OTP Expired" : (isRegistering ? "Verify & Create Account" : "Verify & Login"))}
+                                </button>
 
-                            {/* Confirm Password (Register Only) */}
-                            {isRegistering && (
+                                <div className="text-center">
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowOtp(false)}
+                                        className="text-[10px] font-bold uppercase text-slate-400 hover:text-slate-600 transition-colors"
+                                    >
+                                        Back
+                                    </button>
+                                </div>
+                            </form>
+                        ) : (
+                            // Register / Login Form
+                            <form onSubmit={isRegistering ? handleRegisterStep1 : handleLoginStep1} className="space-y-5 animate-fade-in">
+
+                                <div className="text-center mb-4">
+                                    <h2 className="text-lg font-bold text-slate-800">{isRegistering ? "Create Account" : "Welcome Back"}</h2>
+                                </div>
+
+                                {/* Extra Logic for Registering */}
+                                {isRegistering && (
+                                    <>
+                                        {/* Name */}
+                                        {(activeTab === 'PROFESSIONAL' || isRegistering) && (
+                                            <div className="space-y-1">
+                                                <label className="text-[10px] font-bold uppercase text-slate-400 pl-2">Full Name</label>
+                                                <input
+                                                    type="text"
+                                                    value={name}
+                                                    onChange={(e) => setName(e.target.value)}
+                                                    placeholder="Enter full name"
+                                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 focus:outline-none focus:border-[var(--legal-gold)] transition-colors"
+                                                    required={activeTab === 'PROFESSIONAL'}
+                                                />
+                                            </div>
+                                        )}
+
+                                        {/* Age (Pro Only) */}
+                                        {activeTab === 'PROFESSIONAL' && (
+                                            <div className="space-y-1">
+                                                <label className="text-[10px] font-bold uppercase text-slate-400 pl-2">Age (Must be 18+)</label>
+                                                <input
+                                                    type="number"
+                                                    value={age}
+                                                    onChange={(e) => setAge(e.target.value)}
+                                                    placeholder="Enter Age"
+                                                    className={`w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm font-bold text-slate-900 focus:outline-none transition-colors ${age && parseInt(age) < 18 ? 'border-red-500 focus:border-red-500' : 'border-slate-200 focus:border-[var(--legal-gold)]'}`}
+                                                    required
+                                                    min="18"
+                                                />
+                                                {age && parseInt(age) < 18 && (
+                                                    <p className="text-[10px] font-bold text-red-500 pl-2 pt-1 animate-pulse">
+                                                        ⚠️ Must be 18 or older to register.
+                                                    </p>
+                                                )}
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+
+                                {/* Mobile Number (Common) */}
                                 <div className="space-y-1">
-                                    <label className="text-[10px] font-bold uppercase text-slate-400 pl-2">Confirm Password</label>
+                                    <label className="text-[10px] font-bold uppercase text-slate-400 pl-2">Mobile Number</label>
+                                    <div className="relative">
+                                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                        </div>
+                                        <input
+                                            type="tel"
+                                            value={mobile}
+                                            onChange={(e) => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                                            placeholder="999-999-9999"
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-sm font-bold text-slate-900 focus:outline-none focus:border-[var(--legal-gold)] transition-colors"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Password */}
+                                <div className="space-y-1">
+                                    <label className="text-[10px] font-bold uppercase text-slate-400 pl-2">Password</label>
                                     <input
                                         type="password"
-                                        value={confirmPassword}
-                                        onChange={(e) => setConfirmPassword(e.target.value)}
-                                        placeholder="Repeat Password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        placeholder={isRegistering ? "Create Valid Password" : "Enter Password"}
                                         className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 focus:outline-none focus:border-[var(--legal-gold)] transition-colors"
                                         required
                                     />
                                 </div>
-                            )}
 
-                            <button
-                                type="submit"
-                                disabled={loading}
-                                className="w-full py-4 bg-[var(--legal-black)] text-[var(--legal-gold)] rounded-xl text-xs font-black uppercase tracking-widest hover:bg-slate-800 active:scale-[0.98] transition-all shadow-lg disabled:opacity-70 flex items-center justify-center gap-2 mt-4"
-                            >
-                                {loading ? (
-                                    <span className="w-4 h-4 border-2 border-[var(--legal-gold)] border-t-transparent rounded-full animate-spin" />
-                                ) : (
-                                    isRegistering ? "Register User" : "Verify & Get OTP"
+                                {/* Confirm Password (Register Only) */}
+                                {isRegistering && (
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] font-bold uppercase text-slate-400 pl-2">Confirm Password</label>
+                                        <input
+                                            type="password"
+                                            value={confirmPassword}
+                                            onChange={(e) => setConfirmPassword(e.target.value)}
+                                            placeholder="Repeat Password"
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 focus:outline-none focus:border-[var(--legal-gold)] transition-colors"
+                                            required
+                                        />
+                                    </div>
                                 )}
-                            </button>
 
-                            {/* Toggle Mode */}
-                            <div className="text-center pt-2">
                                 <button
-                                    type="button"
-                                    onClick={() => setIsRegistering(!isRegistering)}
-                                    className="text-[11px] font-bold text-slate-500 hover:text-[var(--legal-black)] transition-colors underline decoration-dotted underline-offset-4"
+                                    type="submit"
+                                    disabled={loading}
+                                    className="w-full py-4 bg-[var(--legal-black)] text-[var(--legal-gold)] rounded-xl text-xs font-black uppercase tracking-widest hover:bg-slate-800 active:scale-[0.98] transition-all shadow-lg disabled:opacity-70 flex items-center justify-center gap-2 mt-4"
                                 >
-                                    {isRegistering ? "Already registered? Login here." : "New user? Create an account."}
+                                    {loading ? (
+                                        <span className="w-4 h-4 border-2 border-[var(--legal-gold)] border-t-transparent rounded-full animate-spin" />
+                                    ) : (
+                                        isRegistering ? "Register User" : "Verify & Get OTP"
+                                    )}
                                 </button>
-                            </div>
 
-                        </form>
-                    )}
-                </div>
+                                {/* Toggle Mode */}
+                                <div className="text-center pt-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsRegistering(!isRegistering)}
+                                        className="text-[11px] font-bold text-slate-500 hover:text-[var(--legal-black)] transition-colors underline decoration-dotted underline-offset-4"
+                                    >
+                                        {isRegistering ? "Already registered? Login here." : "New user? Create an account."}
+                                    </button>
+                                </div>
+
+                            </form>
+                        )}
+                    </div>
+                )}
 
                 {/* Footer */}
                 <div className="p-4 bg-slate-50 text-center border-t border-slate-100">
@@ -515,7 +551,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                                         {user.role === 'PROFESSIONAL' && (
                                             <div className='bg-slate-50 p-2 rounded-lg border border-slate-100 mt-1'>
                                                 <p className='text-[8px] font-bold text-slate-400 uppercase'>Details</p>
-                                                <p className='text-xs text-slate-600'>{user.name} | UID: {user.aadhaar}</p>
+                                                <p className='text-xs text-slate-600'>{user.name} | Age: {user.age}</p>
                                             </div>
                                         )}
                                     </div>
@@ -551,6 +587,17 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                             </button>
                         </div>
                     </div>
+                </div>
+            )}
+
+            {/* Lawyer Registration Overlay */}
+            {showLawyerReg && (
+                <div className="fixed inset-0 z-[200] bg-[#0c0c0c] overflow-y-auto animate-fade-in">
+                    <LawyerRegistration onBack={() => {
+                        // On Complete, finally login
+                        const userKey = `PROFESSIONAL_${mobile}`;
+                        onLogin('PROFESSIONAL', userKey);
+                    }} />
                 </div>
             )}
         </div>
