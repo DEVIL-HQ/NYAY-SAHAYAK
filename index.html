@@ -151,6 +151,17 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: var(--legal-shadow);
         }
+
+        /* Autofill Overrides */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: #ffffff !important;
+            transition: background-color 5000s ease-in-out 0s;
+            box-shadow: inset 0 0 20px 20px #1e293b20 !important;
+        }
     </style>
     <script type="importmap">
 {

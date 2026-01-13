@@ -50,7 +50,7 @@ async function decodeAudioData(
   return buffer;
 }
 
-const SahayakMode: React.FC<{ language: Language; userKey: string | null; onListeningStateChange?: (isListening: boolean) => void }> = ({ language, userKey, onListeningStateChange }) => {
+const SahayakMode: React.FC<{ language: Language; theme: string; userKey: string | null; onListeningStateChange?: (isListening: boolean) => void }> = ({ language, theme, userKey, onListeningStateChange }) => {
   const [state, setState] = useState<State>('IDLE');
   const [dots, setDots] = useState('');
   const [transcript, setTranscript] = useState('');
@@ -65,6 +65,8 @@ const SahayakMode: React.FC<{ language: Language; userKey: string | null; onList
   const [showLawyers, setShowLawyers] = useState(false);
   const [showFIR, setShowFIR] = useState(false);
   const [showEmergency, setShowEmergency] = useState(false);
+  const [showMap, setShowMap] = useState(false);
+  const [isSOSBroadcasting, setIsSOSBroadcasting] = useState(false);
   const [viewMode, setViewMode] = useState<'ASSISTANT' | 'ACTIVITY'>('ASSISTANT'); // Dashboard Toggle
 
   // Initialize FIRs from LocalStorage based on userKey
@@ -427,55 +429,64 @@ const SahayakMode: React.FC<{ language: Language; userKey: string | null; onList
     <div className="h-full w-full flex flex-col no-scrollbar bg-[var(--legal-bg)] transition-colors duration-500">
 
       {/* Header with Toggle */}
-      <header className={`p-4 sm:p-6 flex items-center justify-between relative z-10 shrink-0 border-b border-slate-200 dark:border-slate-800 transition-colors duration-500 ${
-        // Distinct color: Slate-100 (Light) / Slate-900 (Dark)
-        'bg-slate-50 dark:bg-slate-900'
-        }`}>
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-[var(--legal-gold)] rounded-full flex items-center justify-center text-[var(--legal-black)] shadow-lg animate-pulse-slow">
-            {ICONS.SHIELD}
-          </div>
-          <div>
-            <h1 className="text-lg sm:text-xl font-black text-[var(--legal-black)] uppercase tracking-tight leading-none">
-              {t.portal_citizen}
-            </h1>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-[9px] font-bold text-[var(--legal-black)]/60 uppercase tracking-widest">{currentLangConfig?.native} Active</span>
+      <header className="px-4 py-2 sm:p-6 flex flex-col sm:flex-row items-center justify-between relative z-20 shrink-0 border-b border-slate-200 dark:border-white/5 bg-white/70 dark:bg-slate-900/40 backdrop-blur-xl gap-2 sm:gap-4 transition-all duration-500">
+        <div className="flex items-center gap-2 sm:gap-4 w-full sm:w-auto">
+          <div className="hidden sm:flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.3)] animate-pulse-slow transition-colors ${theme === 'DARK' ? 'bg-[var(--legal-gold)] text-slate-900' : 'bg-slate-900 text-[var(--legal-gold)]'}`}>
+              {ICONS.SHIELD}
+            </div>
+            <div>
+              <h1 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">
+                {t.portal_citizen}
+              </h1>
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div>
+                <span className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none">{currentLangConfig?.native} Active</span>
+              </div>
             </div>
           </div>
 
+          {/* Mobile Micro-Identity (Only on very small screens) */}
+          <div className="sm:hidden flex items-center gap-2 mr-auto">
+            <div className="w-6 h-6 bg-[var(--legal-gold)] rounded-full flex items-center justify-center text-slate-900 scale-75">
+              {ICONS.SHIELD}
+            </div>
+            <span className="text-[10px] font-black uppercase text-slate-900 dark:text-white tracking-widest">{t.portal_citizen}</span>
+          </div>
+
           {/* Emergency & Map Buttons */}
-          <div className="flex items-center gap-2 mx-4">
+          <div className="flex items-center gap-2 w-auto">
             <button
-              onClick={() => setShowEmergency(true)}
-              className="p-2 bg-blue-50 text-blue-600 rounded-full border border-blue-100 hover:bg-blue-600 hover:text-white hover:shadow-lg hover:shadow-blue-200 transition-all active:scale-95"
+              onClick={() => setShowMap(true)}
               title="View Live Map"
+              className="px-3 py-1.5 sm:px-4 sm:py-2.5 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 rounded-lg sm:rounded-xl border border-slate-200 dark:border-white/10 hover:bg-slate-200 transition-all active:scale-95 flex items-center gap-1.5 group shadow-sm"
             >
-              <span className="font-black text-xs px-2 flex items-center gap-1">🗺️ {t.btn_map}</span>
+              <span className="text-xs sm:text-sm group-hover:scale-110 transition-transform">🗺️</span>
+              <span className="font-black text-[8px] sm:text-[10px] uppercase tracking-wider">{t.btn_map}</span>
             </button>
 
             <button
               onClick={() => setShowEmergency(true)}
-              className="p-2 bg-red-50 text-red-600 rounded-full border border-red-100 hover:bg-red-600 hover:text-white hover:shadow-lg hover:shadow-red-200 transition-all active:scale-95 animate-pulse-slow"
+              className="px-3 py-1.5 sm:px-4 sm:py-2.5 bg-slate-100 dark:bg-white/5 text-red-600 dark:text-red-400 rounded-lg sm:rounded-xl border border-slate-200 dark:border-white/10 hover:bg-red-600/10 transition-all active:scale-95 animate-pulse-slow flex items-center gap-1.5 group shadow-sm shrink-0"
               title={t.emergency.btn_sos}
             >
-              <span className="font-black text-xs px-2 flex items-center gap-1">🚨 SOS</span>
+              <span className="text-xs sm:text-sm group-hover:scale-110 transition-transform">🚨</span>
+              <span className="font-black text-[8px] sm:text-[10px] uppercase tracking-wider">SOS</span>
             </button>
           </div>
         </div>
 
         {/* View Toggle */}
-        <div className="flex bg-[var(--legal-white)] p-1 rounded-xl shadow-sm border border-[var(--legal-accent)]">
+        <div className="flex bg-slate-100 dark:bg-white/5 p-1 rounded-xl sm:rounded-2xl shadow-inner border border-slate-200 dark:border-white/10 w-full sm:w-auto">
           <button
             onClick={() => setViewMode('ASSISTANT')}
-            className={`px-4 py-2 rounded-lg text-[10px] font-bold uppercase transition-all ${viewMode === 'ASSISTANT' ? 'bg-[var(--legal-black)] text-[var(--legal-gold)] shadow-md' : 'text-slate-400 hover:text-[var(--legal-black)]'}`}
+            className={`flex-1 sm:flex-none px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl text-[8px] sm:text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${viewMode === 'ASSISTANT' ? 'bg-slate-900 text-[var(--legal-gold)] dark:bg-[var(--legal-gold)] dark:text-slate-900 shadow-xl' : 'text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
           >
             {t.btn_assistant}
           </button>
           <button
             onClick={() => setViewMode('ACTIVITY')}
-            className={`px-4 py-2 rounded-lg text-[10px] font-bold uppercase transition-all ${viewMode === 'ACTIVITY' ? 'bg-[var(--legal-black)] text-[var(--legal-gold)] shadow-md' : 'text-slate-400 hover:text-[var(--legal-black)]'}`}
+            className={`flex-1 sm:flex-none px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl text-[8px] sm:text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${viewMode === 'ACTIVITY' ? 'bg-slate-900 text-[var(--legal-gold)] dark:bg-[var(--legal-gold)] dark:text-slate-900 shadow-xl' : 'text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
           >
             {t.btn_activity}
           </button>
@@ -854,52 +865,34 @@ const SahayakMode: React.FC<{ language: Language; userKey: string | null; onList
         }
       `}</style>
 
-          {/* Emergency Modal */}
+          {/* Emergency SOS Modal */}
           {showEmergency && (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
               <div className="bg-[var(--legal-bg)] rounded-[2rem] p-6 sm:p-8 w-full max-w-sm shadow-2xl space-y-6 relative overflow-hidden transition-colors duration-500">
-
-                {/* Header */}
                 <div className="flex justify-between items-center relative z-10">
                   <h3 className="text-xl font-black text-red-600 uppercase tracking-tight">{t.emergency.modal_title}</h3>
                   <button onClick={() => setShowEmergency(false)} className="p-2 bg-[var(--legal-white)] text-[var(--legal-black)] rounded-full hover:bg-slate-200 shadow-sm border border-[var(--legal-border)]">✕</button>
                 </div>
 
-                {/* Live Map */}
-                <div className="rounded-2xl overflow-hidden border border-slate-200 shadow-inner">
-                  <LiveMap onLocationFound={(lat, lng) => {
-                    // Reverse Geocode using OSM Nominatim
-                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
-                      .then(res => res.json())
-                      .then(data => {
-                        const addr = data.address;
-                        const shortAddr = `${addr.suburb || addr.neighbourhood || addr.road || ''}, ${addr.city || addr.state_district || ''}`;
-                        setUserLocation({ lat, lng, address: shortAddr || "Unknown Location" });
-                      })
-                      .catch(() => setUserLocation({ lat, lng, address: `${lat.toFixed(4)}, ${lng.toFixed(4)}` }));
-                  }} />
-                </div>
-
-                {/* SOS Call Button */}
                 <div className="relative group">
                   <div className="absolute inset-0 bg-red-500 rounded-3xl blur-xl opacity-20 group-hover:opacity-40 transition-opacity animate-pulse"></div>
                   <button
                     onClick={() => {
-                      const locText = userLocation ? `Location: ${userLocation.address}\nCoords: ${userLocation.lat}, ${userLocation.lng}` : "Location not detected yet.";
-                      alert(`${t.emergency.locating}\n\n${t.emergency.connecting}\n\n${locText}`);
-                      window.open("tel:112");
+                      setIsSOSBroadcasting(true);
+                      setTimeout(() => {
+                        const locText = userLocation ? `Location: ${userLocation.address}\nCoords: ${userLocation.lat}, ${userLocation.lng}` : "Location not detected yet.";
+                        alert(`${t.emergency.locating}\n\n${t.emergency.connecting}\n\n${locText}`);
+                        window.open("tel:112");
+                        setIsSOSBroadcasting(false);
+                      }, 4000);
                     }}
                     className="w-full py-6 bg-gradient-to-br from-red-600 to-red-700 text-white rounded-3xl shadow-xl flex flex-col items-center gap-2 relative z-10 hover:scale-[1.02] active:scale-[0.98] transition-all"
                   >
                     <div className="text-4xl animate-bounce">🚨</div>
                     <span className="text-lg font-black uppercase tracking-widest">{t.emergency.btn_call_police}</span>
-                    <span className="text-[10px] font-bold opacity-80 bg-red-800/30 px-3 py-1 rounded-full">
-                      {userLocation ? `GPS: ${userLocation.address}` : "Detecting Location..."}
-                    </span>
                   </button>
                 </div>
 
-                {/* Helplines Grid */}
                 <div className="space-y-3">
                   <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t.emergency.helpline_title}</h4>
                   <div className="grid grid-cols-2 gap-3">
@@ -912,7 +905,6 @@ const SahayakMode: React.FC<{ language: Language; userKey: string | null; onList
                         <span className="text-xl group-hover:scale-110 transition-transform">{h.icon}</span>
                         <div className="flex flex-col">
                           <span className="text-[10px] font-bold text-[var(--legal-black)]/60 uppercase leading-none">
-                            {/* Use translated name based on ID, fallback to English name */}
                             {t.emergency.helplines?.[h.id as string] || h.name}
                           </span>
                           <span className="text-sm font-black text-[var(--legal-black)]">{h.number}</span>
@@ -922,6 +914,73 @@ const SahayakMode: React.FC<{ language: Language; userKey: string | null; onList
                   </div>
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* Dedicated Map Modal */}
+          {showMap && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+              <div className="bg-[var(--legal-bg)] rounded-[2.5rem] w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl relative overflow-hidden transition-colors duration-500">
+                <div className="p-6 border-b border-slate-200 dark:border-white/5 flex justify-between items-center bg-white/50 dark:bg-slate-900/50 backdrop-blur-md">
+                  <div>
+                    <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Nearby Services</h3>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Explore Police, Hospitals & More</p>
+                  </div>
+                  <button onClick={() => setShowMap(false)} className="p-3 bg-slate-100 dark:bg-white/5 rounded-full text-slate-500 transition-all hover:rotate-90">✕</button>
+                </div>
+
+                <div className="h-[400px] sm:h-[500px] w-full relative">
+                  <LiveMap onLocationFound={(lat, lng) => {
+                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                      .then(res => res.json())
+                      .then(data => {
+                        const addr = data.address;
+                        const shortAddr = `${addr.suburb || addr.neighbourhood || addr.road || ''}, ${addr.city || addr.state_district || ''}`;
+                        setUserLocation({ lat, lng, address: shortAddr || "Unknown Location" });
+                      });
+                  }} />
+                </div>
+
+                <div className="p-4 bg-slate-50 dark:bg-white/5 flex items-center justify-between text-[10px] font-bold border-t border-slate-200 dark:border-white/5">
+                  <div className="flex items-center gap-4">
+                    <span className="flex items-center gap-1.5"><span className="w-2 h-2 bg-blue-600 rounded-full"></span> Police</span>
+                    <span className="flex items-center gap-1.5"><span className="w-2 h-2 bg-emerald-600 rounded-full"></span> Hospitals</span>
+                  </div>
+                  <div className="text-slate-400 uppercase tracking-widest hidden sm:block">
+                    {userLocation?.address || "Detecting Precise Location..."}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* SOS Broadcasting Overlay (Fullscreen) */}
+          {isSOSBroadcasting && (
+            <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-red-600 animate-fade-in p-8 text-center ring-[20px] ring-red-500/50 ring-inset">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.2)_0%,transparent_70%)] animate-pulse"></div>
+              <div className="relative w-48 h-48 mb-8">
+                <div className="absolute inset-0 bg-white/20 rounded-full animate-ping"></div>
+                <div className="absolute inset-4 bg-white/40 rounded-full animate-ping [animation-delay:0.5s]"></div>
+                <div className="absolute inset-8 bg-white/60 rounded-full animate-ping [animation-delay:1s]"></div>
+                <div className="absolute inset-0 flex items-center justify-center text-6xl">🚨</div>
+              </div>
+              <h2 className="text-4xl font-black text-white uppercase tracking-tighter mb-4 animate-bounce">Broadcasting SOS</h2>
+              <p className="text-white/90 font-bold uppercase tracking-widest text-sm mb-8">Sharing Live Location & Details...</p>
+              <div className="bg-black/20 backdrop-blur-xl p-6 rounded-3xl border border-white/20 w-full max-w-sm">
+                <div className="flex items-center justify-center gap-4 text-white">
+                  <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                  <span className="text-xs font-black uppercase">Police Dispatcher Connecting...</span>
+                </div>
+                <div className="mt-4 text-[10px] text-white/60 font-mono">
+                  {userLocation?.address || "LAT: 28.61, LNG: 77.20"}
+                </div>
+              </div>
+              <button
+                onClick={(e) => { e.stopPropagation(); setIsSOSBroadcasting(false); }}
+                className="mt-12 px-8 py-3 bg-white text-red-600 rounded-full text-xs font-black uppercase tracking-widest shadow-2xl active:scale-95"
+              >
+                Cancel Emergency
+              </button>
             </div>
           )}
         </div>

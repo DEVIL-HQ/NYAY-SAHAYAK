@@ -112,7 +112,7 @@ const LawyerRegistration: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-8 bg-white p-8 rounded-3xl border border-slate-200 shadow-xl">
+            <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8 bg-slate-900/40 backdrop-blur-3xl p-5 md:p-8 rounded-3xl border border-white/10 shadow-2xl">
 
                 {/* Basic Info */}
                 <section className="space-y-4">
@@ -120,19 +120,19 @@ const LawyerRegistration: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                             <label className="text-xs font-bold uppercase text-slate-500">Full Name</label>
-                            <input required name="name" value={formData.name} onChange={handleInputChange} className="w-full p-3 bg-slate-50 rounded-xl font-bold border-2 border-transparent focus:border-[var(--legal-gold)] outline-none transition-all text-black" placeholder="Adv. Name" />
+                            <input required name="name" value={formData.name} onChange={handleInputChange} autoComplete="name" className="w-full p-4 bg-white/5 rounded-xl font-bold border border-white/10 focus:border-[var(--legal-gold)] outline-none transition-all text-white placeholder:text-slate-600 text-sm" placeholder="Adv. Name" />
                         </div>
                         <div className="space-y-2">
                             <label className="text-xs font-bold uppercase text-slate-500">Email</label>
-                            <input required name="email" type="email" value={formData.email} onChange={handleInputChange} className="w-full p-3 bg-slate-50 rounded-xl font-bold border-2 border-transparent focus:border-[var(--legal-gold)] outline-none transition-all text-black" placeholder="lawyer@example.com" />
+                            <input required name="email" type="email" value={formData.email} onChange={handleInputChange} autoComplete="email" className="w-full p-4 bg-white/5 rounded-xl font-bold border border-white/10 focus:border-[var(--legal-gold)] outline-none transition-all text-white placeholder:text-slate-600 text-sm" placeholder="lawyer@example.com" />
                         </div>
                         <div className="space-y-2">
                             <label className="text-xs font-bold uppercase text-slate-500">Phone</label>
-                            <input required name="phone" value={formData.phone} onChange={handleInputChange} className="w-full p-3 bg-slate-50 rounded-xl font-bold border-2 border-transparent focus:border-[var(--legal-gold)] outline-none transition-all text-black" placeholder="+91 9876543210" />
+                            <input required name="phone" value={formData.phone} onChange={handleInputChange} autoComplete="tel" className="w-full p-4 bg-white/5 rounded-xl font-bold border border-white/10 focus:border-[var(--legal-gold)] outline-none transition-all text-white placeholder:text-slate-600 text-sm" placeholder="+91 9876543210" />
                         </div>
                         <div className="space-y-2">
                             <label className="text-xs font-bold uppercase text-slate-500">Practicing Court</label>
-                            <input required name="court" value={formData.court} onChange={handleInputChange} className="w-full p-3 bg-slate-50 rounded-xl font-bold border-2 border-transparent focus:border-[var(--legal-gold)] outline-none transition-all text-black" placeholder="e.g. Supreme Court, Delhi High Court" />
+                            <input required name="court" value={formData.court} onChange={handleInputChange} autoComplete="off" className="w-full p-4 bg-white/5 rounded-xl font-bold border border-white/10 focus:border-[var(--legal-gold)] outline-none transition-all text-white placeholder:text-slate-600 text-sm" placeholder="e.g. Supreme Court, Delhi High Court" />
                         </div>
                     </div>
                 </section>
@@ -143,19 +143,19 @@ const LawyerRegistration: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                             <label className="text-xs font-bold uppercase text-slate-500">Bar Council ID</label>
-                            <input required name="barCouncilId" value={formData.barCouncilId} onChange={handleInputChange} className="w-full p-3 bg-slate-50 rounded-xl font-bold border-2 border-transparent focus:border-[var(--legal-gold)] outline-none transition-all text-black" placeholder="BCI/..." />
+                            <input required name="barCouncilId" value={formData.barCouncilId} onChange={handleInputChange} autoComplete="off" className="w-full p-4 bg-white/5 rounded-xl font-bold border border-white/10 focus:border-[var(--legal-gold)] outline-none transition-all text-white placeholder:text-slate-600 text-sm" placeholder="BCI/..." />
                         </div>
                         <div className="space-y-2">
                             <label className="text-xs font-bold uppercase text-slate-500">Experience (Years)</label>
-                            <input required name="experience" type="number" value={formData.experience} onChange={handleInputChange} className="w-full p-3 bg-slate-50 rounded-xl font-bold border-2 border-transparent focus:border-[var(--legal-gold)] outline-none transition-all text-black" />
+                            <input required name="experience" type="number" value={formData.experience} onChange={handleInputChange} autoComplete="off" className="w-full p-4 bg-white/5 rounded-xl font-bold border border-white/10 focus:border-[var(--legal-gold)] outline-none transition-all text-white text-sm" />
                         </div>
                         <div className="space-y-2">
                             <label className="text-xs font-bold uppercase text-slate-500">Consultation Fee (₹)</label>
-                            <input required name="fee" type="number" value={formData.fee} onChange={handleInputChange} className="w-full p-3 bg-slate-50 rounded-xl font-bold border-2 border-transparent focus:border-[var(--legal-gold)] outline-none transition-all text-black" />
+                            <input required name="fee" type="number" value={formData.fee} onChange={handleInputChange} autoComplete="off" className="w-full p-4 bg-white/5 rounded-xl font-bold border border-white/10 focus:border-[var(--legal-gold)] outline-none transition-all text-white text-sm" />
                         </div>
                         <div className="space-y-2">
                             <label className="text-xs font-bold uppercase text-slate-500">Profile Bio</label>
-                            <textarea name="bio" value={formData.bio} onChange={handleInputChange} className="w-full p-3 bg-slate-50 rounded-xl font-bold border-2 border-transparent focus:border-[var(--legal-gold)] outline-none transition-all text-black h-[52px] resize-none" placeholder="Brief about your expertise..." />
+                            <textarea name="bio" value={formData.bio} onChange={handleInputChange} autoComplete="off" className="w-full p-4 bg-white/5 rounded-xl font-bold border border-white/10 focus:border-[var(--legal-gold)] outline-none transition-all text-white h-[52px] resize-none placeholder:text-slate-600 text-sm" placeholder="Brief about your expertise..." />
                         </div>
                     </div>
                 </section>
@@ -169,7 +169,7 @@ const LawyerRegistration: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                                 key={spec}
                                 type="button"
                                 onClick={() => handleCheckboxChange(spec)}
-                                className={`px-4 py-2 rounded-full text-xs font-bold uppercase border-2 transition-all ${formData.specialization.includes(spec) ? 'bg-[var(--legal-black)] text-white border-[var(--legal-black)]' : 'bg-transparent text-slate-400 border-slate-200 hover:border-slate-400'}`}
+                                className={`px-4 py-2 rounded-full text-xs font-bold uppercase border transition-all ${formData.specialization.includes(spec) ? 'bg-[var(--legal-gold)] text-slate-900 border-[var(--legal-gold)]' : 'bg-white/5 text-slate-400 border-white/10 hover:border-[var(--legal-gold)]/50'}`}
                             >
                                 {spec}
                             </button>
@@ -181,15 +181,15 @@ const LawyerRegistration: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 <section className="space-y-4">
                     <h3 className="text-sm font-black uppercase text-[var(--legal-gold)] mb-4">Verification Documents</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="p-6 border-2 border-dashed border-slate-200 rounded-2xl hover:bg-slate-50 transition-colors text-center cursor-pointer relative">
+                        <div className="p-6 border-2 border-dashed border-white/5 rounded-2xl hover:bg-white/5 hover:border-[var(--legal-gold)]/50 transition-colors text-center cursor-pointer relative">
                             <input type="file" onChange={(e) => setProfileImage(e.target.files?.[0] || null)} className="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" />
-                            <div className="text-slate-400 mb-2">{ICONS.USERS}</div>
-                            <p className="text-xs font-bold text-slate-600 uppercase">{profileImage ? profileImage.name : 'Upload Profile Photo'}</p>
+                            <div className="text-slate-500 mb-2">{ICONS.USERS}</div>
+                            <p className="text-xs font-bold text-slate-400 uppercase">{profileImage ? profileImage.name : 'Upload Profile Photo'}</p>
                         </div>
-                        <div className="p-6 border-2 border-dashed border-slate-200 rounded-2xl hover:bg-slate-50 transition-colors text-center cursor-pointer relative">
+                        <div className="p-6 border-2 border-dashed border-white/5 rounded-2xl hover:bg-white/5 hover:border-[var(--legal-gold)]/50 transition-colors text-center cursor-pointer relative">
                             <input type="file" onChange={(e) => setIdCard(e.target.files?.[0] || null)} className="absolute inset-0 opacity-0 cursor-pointer" accept="image/*,application/pdf" />
-                            <div className="text-slate-400 mb-2">{ICONS.DOC}</div>
-                            <p className="text-xs font-bold text-slate-600 uppercase">{idCard ? idCard.name : 'Upload Bar Council ID'}</p>
+                            <div className="text-slate-500 mb-2">{ICONS.DOC}</div>
+                            <p className="text-xs font-bold text-slate-400 uppercase">{idCard ? idCard.name : 'Upload Bar Council ID'}</p>
                         </div>
                     </div>
                 </section>
@@ -199,9 +199,9 @@ const LawyerRegistration: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full py-4 bg-[var(--legal-black)] text-white rounded-2xl font-black uppercase tracking-widest hover:bg-gray-800 transition-all flex items-center justify-center space-x-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                        className="w-full py-4 bg-[var(--legal-gold)] text-slate-900 rounded-2xl font-black uppercase tracking-widest hover:bg-white transition-all flex items-center justify-center space-x-2 disabled:opacity-70 disabled:cursor-not-allowed shadow-[0_20px_40px_-10px_rgba(212,175,55,0.3)]"
                     >
-                        {loading && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>}
+                        {loading && <div className="w-4 h-4 border-2 border-slate-900 border-t-transparent rounded-full animate-spin"></div>}
                         <span>Complete Registration</span>
                     </button>
                 </div>

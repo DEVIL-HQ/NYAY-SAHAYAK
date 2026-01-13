@@ -218,15 +218,15 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     const userList = Object.keys(userDB).map(key => ({ key, ...userDB[key] }));
 
     return (
-        <div className="min-h-screen bg-[#0f172a] relative overflow-y-auto overflow-x-hidden flex flex-col items-center justify-start md:justify-center p-4 md:p-8 custom-scrollbar">
+        <div className="min-h-screen bg-[#0f172a] relative overflow-y-auto overflow-x-hidden flex flex-col items-center justify-start pt-6 pb-20 md:pt-20 px-4 md:px-8 custom-scrollbar">
 
             {/* IMMERSIVE BACKGROUND (FIXED) */}
             <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px] animate-pulse"></div>
                 <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-[var(--legal-gold)]/10 rounded-full blur-[100px] animate-pulse delay-1000"></div>
                 <div className="absolute top-[40%] left-[50%] -translate-x-1/2 w-[60%] h-[60%] bg-indigo-500/5 rounded-full blur-[150px]"></div>
-                {/* Pattern Overlay */}
-                <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+                {/* Pattern Overlay: Refined Dot Grid */}
+                <div className="absolute inset-0 opacity-[0.2]" style={{ backgroundImage: 'radial-gradient(var(--legal-gold) 0.5px, transparent 0.5px)', backgroundSize: '24px 24px' }}></div>
 
                 {/* Floating Elements (Decorative) */}
                 <div className="absolute inset-0 opacity-[0.03]">
@@ -251,20 +251,20 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             </div>
 
             {/* MAIN CONTENT AREA */}
-            <div className="relative z-10 w-full max-w-5xl flex flex-col items-center gap-8 md:gap-12 animate-fade-in">
+            <div className="relative z-10 w-full max-w-5xl flex flex-col items-center gap-6 md:gap-12 animate-fade-in">
 
                 {/* BRANDING */}
-                <div className="text-center space-y-4">
-                    <div className="inline-flex items-center justify-center p-4 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl mb-2 hover:scale-105 transition-transform duration-500">
-                        <div className="text-4xl text-[var(--legal-gold)] drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]">
+                <div className="text-center space-y-2 md:space-y-4">
+                    <div className="inline-flex items-center justify-center p-3 md:p-4 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl mb-1 md:mb-2 hover:scale-105 transition-transform duration-500">
+                        <div className="text-2xl md:text-4xl text-[var(--legal-gold)] drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]">
                             {ICONS.SCALE}
                         </div>
                     </div>
                     <div>
-                        <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-white leading-tight">
+                        <h1 className="text-3xl md:text-6xl font-black tracking-tighter text-white leading-tight">
                             NYAAY <span className="text-[var(--legal-gold)]">SAHAYAK</span>
                         </h1>
-                        <p className="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-[0.4em] mt-3 opacity-60">
+                        <p className="text-[9px] md:text-xs font-bold text-slate-400 uppercase tracking-[0.4em] mt-2 md:mt-3 opacity-60">
                             Advanced AI Legal Intelligence
                         </p>
                     </div>
@@ -314,12 +314,12 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                     </div>
                 ) : (
                     <div className="w-full max-w-md animate-scale-in">
-                        <div className="bg-white rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.3)] overflow-hidden border border-slate-100 flex flex-col">
-                            <div className="p-8 pb-6 text-center border-b border-slate-100 relative bg-slate-50/30">
+                        <div className="bg-slate-900/40 backdrop-blur-3xl rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.6)] overflow-hidden border border-white/10 flex flex-col">
+                            <div className="p-8 pb-6 text-center border-b border-white/5 relative bg-white/5">
                                 {!showOtp && (
                                     <button
                                         onClick={() => { setView('SELECTION'); resetForm(); }}
-                                        className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-900 transition-all p-2.5 hover:bg-white rounded-xl border border-transparent hover:border-slate-200 shadow-sm hover:shadow-md group"
+                                        className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-all p-2.5 hover:bg-white/10 rounded-xl border border-transparent hover:border-white/20 shadow-sm hover:shadow-md group"
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -338,15 +338,15 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                                 {showOtp ? (
                                     <form onSubmit={handleVerifyOtp} className="space-y-6">
                                         <div className="text-center space-y-2">
-                                            <p className="text-lg font-black text-slate-800 tracking-tight">Verify Secure Code</p>
-                                            <p className="text-xs font-medium text-slate-400">Identity check for <span className="text-slate-900 font-bold">{mobile}</span></p>
+                                            <p className="text-lg font-black text-white tracking-tight">Verify Secure Code</p>
+                                            <p className="text-xs font-medium text-slate-400">Identity check for <span className="text-white font-bold">{mobile}</span></p>
                                             <div className="pt-2">
                                                 {otpTimer > 0 ? (
-                                                    <span className={`text-[10px] font-black px-4 py-1.5 rounded-full ${otpTimer > 10 ? 'bg-slate-100 text-slate-500' : 'bg-red-50 text-red-500'}`}>
+                                                    <span className={`text-[10px] font-black px-4 py-1.5 rounded-full ${otpTimer > 10 ? 'bg-white/5 text-slate-400' : 'bg-red-500/10 text-red-400'}`}>
                                                         AUTODESTRUCT IN 00:{otpTimer.toString().padStart(2, '0')}
                                                     </span>
                                                 ) : (
-                                                    <button type="button" onClick={handleResendOtp} className="text-[10px] font-black uppercase text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded-full">
+                                                    <button type="button" onClick={handleResendOtp} className="text-[10px] font-black uppercase text-[var(--legal-gold)] hover:bg-[var(--legal-gold)]/10 px-3 py-1.5 rounded-full">
                                                         Resend Code ↺
                                                     </button>
                                                 )}
@@ -359,7 +359,8 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                                                     maxLength={4}
                                                     value={otp}
                                                     onChange={(e) => setOtp(e.target.value)}
-                                                    className="w-56 text-center text-5xl font-black tracking-[0.5em] py-6 bg-slate-50 border-2 border-slate-100 rounded-3xl outline-none focus:border-[var(--legal-gold)] focus:ring-8 focus:ring-[var(--legal-gold)]/5 transition-all text-slate-900 shadow-inner"
+                                                    autoComplete="one-time-code"
+                                                    className="w-56 text-center text-5xl font-black tracking-[0.5em] py-6 bg-white/5 border-2 border-white/10 rounded-3xl outline-none focus:border-[var(--legal-gold)] focus:ring-8 focus:ring-[var(--legal-gold)]/5 transition-all text-white shadow-inner"
                                                     placeholder="0000"
                                                     autoFocus
                                                 />
@@ -369,7 +370,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                                         <button
                                             type="submit"
                                             disabled={loading || otpTimer === 0}
-                                            className="w-full py-5 bg-slate-900 text-[var(--legal-gold)] rounded-2xl text-[10px] font-black uppercase tracking-[0.25em] hover:bg-black active:scale-[0.98] transition-all shadow-xl disabled:opacity-50 flex items-center justify-center gap-3"
+                                            className="w-full py-5 bg-[var(--legal-gold)] text-slate-900 rounded-2xl text-[10px] font-black uppercase tracking-[0.25em] hover:bg-white active:scale-[0.98] transition-all shadow-xl disabled:opacity-50 flex items-center justify-center gap-3"
                                         >
                                             {loading ? <div className="w-5 h-5 border-2 border-[var(--legal-gold)] border-t-transparent rounded-full animate-spin" /> : ICONS.UNLOCK}
                                             VERIFY IDENTITY
@@ -378,15 +379,15 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                                 ) : (
                                     <form onSubmit={isRegistering ? handleRegisterStep1 : handleLoginStep1} className="space-y-4">
                                         <div className="flex items-center gap-4 mb-2">
-                                            <div className="flex-1 h-px bg-slate-100"></div>
-                                            <h3 className="text-[9px] font-black uppercase text-slate-300 tracking-[0.3em]">{isRegistering ? "Register Identity" : "Member Login"}</h3>
-                                            <div className="flex-1 h-px bg-slate-100"></div>
+                                            <div className="flex-1 h-px bg-white/5"></div>
+                                            <h3 className="text-[9px] font-black uppercase text-slate-400 tracking-[0.3em]">{isRegistering ? "Register Identity" : "Member Login"}</h3>
+                                            <div className="flex-1 h-px bg-white/5"></div>
                                         </div>
 
                                         {isRegistering && (
                                             <div className="space-y-4 animate-fade-in">
                                                 <div className="relative group">
-                                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[var(--legal-gold)] transition-colors">
+                                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-[var(--legal-gold)] transition-colors">
                                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                                                     </div>
                                                     <input
@@ -394,13 +395,14 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                                                         value={name}
                                                         onChange={(e) => setName(e.target.value)}
                                                         placeholder="Full Identity Name"
-                                                        className="w-full bg-slate-50/50 border border-slate-200 rounded-xl pl-12 pr-5 py-4 text-sm font-bold text-slate-900 focus:outline-none focus:border-[var(--legal-gold)] focus:ring-4 focus:ring-[var(--legal-gold)]/5 transition-all"
+                                                        autoComplete="name"
+                                                        className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-5 py-4 text-sm font-bold text-white placeholder:text-slate-600 focus:outline-none focus:border-[var(--legal-gold)] focus:ring-4 focus:ring-[var(--legal-gold)]/5 transition-all"
                                                         required
                                                     />
                                                 </div>
                                                 {activeTab === 'PROFESSIONAL' && (
                                                     <div className="relative group">
-                                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[var(--legal-gold)] transition-colors">
+                                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-[var(--legal-gold)] transition-colors">
                                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                                         </div>
                                                         <input
@@ -408,7 +410,8 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                                                             value={age}
                                                             onChange={(e) => setAge(e.target.value)}
                                                             placeholder="Current Age (18+)"
-                                                            className="w-full bg-slate-50/50 border border-slate-200 rounded-xl pl-12 pr-5 py-4 text-sm font-bold text-slate-900 focus:outline-none focus:border-[var(--legal-gold)] focus:ring-4 focus:ring-[var(--legal-gold)]/5 transition-all"
+                                                            autoComplete="off"
+                                                            className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-5 py-4 text-sm font-bold text-white placeholder:text-slate-600 focus:outline-none focus:border-[var(--legal-gold)] focus:ring-4 focus:ring-[var(--legal-gold)]/5 transition-all"
                                                             required
                                                         />
                                                     </div>
@@ -417,7 +420,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                                         )}
 
                                         <div className="relative group">
-                                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[var(--legal-gold)] transition-colors">
+                                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-[var(--legal-gold)] transition-colors">
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                                             </div>
                                             <input
@@ -425,13 +428,14 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                                                 value={mobile}
                                                 onChange={(e) => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))}
                                                 placeholder="Mobile Reference"
-                                                className="w-full bg-slate-50/50 border border-slate-200 rounded-xl pl-12 pr-5 py-4 text-sm font-bold text-slate-900 focus:outline-none focus:border-[var(--legal-gold)] focus:ring-4 focus:ring-[var(--legal-gold)]/5 transition-all"
+                                                autoComplete="tel"
+                                                className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-5 py-4 text-sm font-bold text-white placeholder:text-slate-600 focus:outline-none focus:border-[var(--legal-gold)] focus:ring-4 focus:ring-[var(--legal-gold)]/5 transition-all"
                                                 required
                                             />
                                         </div>
 
                                         <div className="relative group">
-                                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[var(--legal-gold)] transition-colors">
+                                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-[var(--legal-gold)] transition-colors">
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                                             </div>
                                             <input
@@ -439,14 +443,15 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                                                 value={password}
                                                 onChange={(e) => setPassword(e.target.value)}
                                                 placeholder="Security Password"
-                                                className="w-full bg-slate-50/50 border border-slate-200 rounded-xl pl-12 pr-5 py-4 text-sm font-bold text-slate-900 focus:outline-none focus:border-[var(--legal-gold)] focus:ring-4 focus:ring-[var(--legal-gold)]/5 transition-all"
+                                                autoComplete="new-password"
+                                                className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-5 py-4 text-sm font-bold text-white placeholder:text-slate-600 focus:outline-none focus:border-[var(--legal-gold)] focus:ring-4 focus:ring-[var(--legal-gold)]/5 transition-all"
                                                 required
                                             />
                                         </div>
 
                                         {isRegistering && (
                                             <div className="relative group">
-                                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[var(--legal-gold)] transition-colors">
+                                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-[var(--legal-gold)] transition-colors">
                                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                                                 </div>
                                                 <input
@@ -454,7 +459,8 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                                                     value={confirmPassword}
                                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                                     placeholder="Confirm Security Password"
-                                                    className="w-full bg-slate-50/50 border border-slate-200 rounded-xl pl-12 pr-5 py-4 text-sm font-bold text-slate-900 focus:outline-none focus:border-[var(--legal-gold)] focus:ring-4 focus:ring-[var(--legal-gold)]/5 transition-all"
+                                                    autoComplete="new-password"
+                                                    className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-5 py-4 text-sm font-bold text-white placeholder:text-slate-600 focus:outline-none focus:border-[var(--legal-gold)] focus:ring-4 focus:ring-[var(--legal-gold)]/5 transition-all"
                                                     required
                                                 />
                                             </div>
@@ -463,16 +469,16 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                                         <button
                                             type="submit"
                                             disabled={loading}
-                                            className="w-full py-5 bg-slate-900 text-[var(--legal-gold)] rounded-2xl text-[11px] font-black uppercase tracking-[0.25em] shadow-2xl hover:bg-black active:scale-[0.98] transition-all disabled:opacity-50 mt-2"
+                                            className="w-full py-5 bg-[var(--legal-gold)] text-slate-900 rounded-2xl text-[11px] font-black uppercase tracking-[0.25em] shadow-[0_20px_40px_-10px_rgba(212,175,55,0.3)] hover:bg-white active:scale-[0.98] transition-all disabled:opacity-50 mt-2"
                                         >
-                                            {loading ? <div className="w-5 h-5 border-2 border-[var(--legal-gold)] border-t-transparent rounded-full animate-spin mx-auto" /> : (isRegistering ? "Register Identity" : "Authorize Access")}
+                                            {loading ? <div className="w-5 h-5 border-2 border-slate-900 border-t-transparent rounded-full animate-spin mx-auto" /> : (isRegistering ? "Register Identity" : "Authorize Access")}
                                         </button>
 
                                         <div className="text-center pt-2">
                                             <button
                                                 type="button"
                                                 onClick={() => setIsRegistering(!isRegistering)}
-                                                className="text-[10px] font-black text-slate-400 hover:text-slate-900 uppercase tracking-widest transition-colors flex items-center justify-center gap-2 mx-auto"
+                                                className="text-[10px] font-black text-slate-500 hover:text-[var(--legal-gold)] uppercase tracking-widest transition-colors flex items-center justify-center gap-2 mx-auto"
                                             >
                                                 {isRegistering ? "Have Credentials? Sign In" : "Need Access? Request Portal"}
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
@@ -481,8 +487,8 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                                     </form>
                                 )}
                             </div>
-                            <div className="bg-slate-50/50 p-4 border-t border-slate-100 text-center">
-                                <p className="text-[9px] font-black text-slate-300 uppercase tracking-widest flex items-center justify-center gap-2">
+                            <div className="bg-white/5 p-4 border-t border-white/5 text-center">
+                                <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest flex items-center justify-center gap-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                                     End-To-End Encryption
                                 </p>
@@ -492,7 +498,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                 )}
 
                 {/* Live Stats Ticker */}
-                <div className="w-full max-w-2xl px-4 py-8 pointer-events-none overflow-hidden">
+                <div className="w-full max-w-2xl px-4 py-8 pb-20 pointer-events-none overflow-hidden">
                     <div className="flex animate-marquee whitespace-nowrap gap-12 text-[9px] md:text-[10px] font-black text-slate-500 uppercase tracking-[0.25em] opacity-40">
                         <span className="flex items-center gap-2">🟢 System Online</span>
                         <span className="flex items-center gap-2">⚖️ 12k+ Active Precedents</span>

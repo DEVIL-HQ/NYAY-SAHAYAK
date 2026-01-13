@@ -274,6 +274,18 @@ const ExpertMode: React.FC<ExpertModeProps> = ({ language }) => {
             </button>
           ))}
 
+          {/* Registration Button in Sidebar (Mobile fallback) */}
+          <button
+            onClick={() => { setShowRegistration(true); setIsMobileMenuOpen(false); }}
+            className="w-full flex items-center space-x-3 p-3 rounded-xl hover:bg-white/5 border border-transparent transition-all group lg:hidden"
+          >
+            <span className="text-blue-400 group-hover:scale-110 transition-transform">{ICONS.USERS}</span>
+            <div className="flex-1">
+              <span className="text-[10px] font-bold uppercase text-white/60 group-hover:text-white transition-colors">Register Identity</span>
+              <div className="text-[8px] text-gold/60">Professional Profile</div>
+            </div>
+          </button>
+
           <div className="pt-8 space-y-4">
             <div className="flex items-center space-x-2 px-3">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
@@ -347,12 +359,12 @@ const ExpertMode: React.FC<ExpertModeProps> = ({ language }) => {
             {/* User Request: Replace 'Advocate Profile' with 'Register' to ensure registration visibility */}
             <button
               onClick={() => setShowRegistration(true)}
-              className="p-2 border border-white/20 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-all group lg:flex items-center space-x-2 hidden"
+              className="p-2 border border-white/20 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-all group flex items-center space-x-2"
               title="Register as Professional"
             >
-              <span>{ICONS.USERS}</span>
-              <span className="text-[10px] font-bold uppercase pr-2">Register as Advocate</span>
-              <div className="w-2 h-2 bg-gold rounded-full animate-pulse ml-1"></div>
+              <span className="scale-90 sm:scale-100">{ICONS.USERS}</span>
+              <span className="text-[9px] sm:text-[10px] font-black uppercase hidden sm:inline">Register</span>
+              <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-gold rounded-full animate-pulse ml-0.5 sm:ml-1"></div>
             </button>
 
             <button

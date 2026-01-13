@@ -84,30 +84,30 @@ const App: React.FC = () => {
     <div className="flex flex-col h-screen overflow-hidden bg-[var(--legal-bg)] text-[var(--legal-black)] selection:bg-[var(--legal-gold)]/30 transaction-colors duration-300">
       {/* Premium Glass Header */}
       <nav className={`flex flex-col border-b border-[var(--legal-accent)] z-50 transition-colors duration-300 ${theme === 'DARK' ? 'bg-slate-950/90 backdrop-blur-md' : 'bg-white/90 backdrop-blur-md'}`}>
-        <div className="relative flex flex-wrap md:flex-nowrap items-center justify-between px-6 sm:px-10 py-4">
-          <div className="flex items-center space-x-3">
-            <div className={`w-10 h-10 rounded-2xl flex items-center justify-center animate-pulse shadow-xl transition-colors ${theme === 'DARK' ? 'bg-white text-black' : 'bg-black text-[var(--legal-gold)]'}`}>
-              {ICONS.SCALE}
+        <div className="relative flex flex-wrap items-center justify-between px-4 sm:px-10 py-3 sm:py-4 gap-3">
+          <div className="flex items-center space-x-2 sm:space-x-3">
+            <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center animate-pulse shadow-xl transition-colors ${theme === 'DARK' ? 'bg-white text-black' : 'bg-black text-[var(--legal-gold)]'}`}>
+              <div className="scale-75 sm:scale-100">{ICONS.SCALE}</div>
             </div>
             <div>
-              <h1 className="text-sm sm:text-base font-black tracking-tight uppercase leading-none">NYAAY Sahayak</h1>
-              <span className="text-[7px] sm:text-[8px] font-bold opacity-60 uppercase">Legal Intelligence Unit</span>
+              <h1 className="text-xs sm:text-base font-black tracking-tight uppercase leading-none text-slate-900 dark:text-white">NYAAY Sahayak</h1>
+              <span className="text-[6px] sm:text-[8px] font-bold opacity-60 uppercase text-slate-500 dark:text-slate-400">Legal Intelligence Unit</span>
             </div>
           </div>
 
 
 
           {/* Actions */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2">
             {/* Language Dropdown */}
             <div className="relative">
               <button
                 onClick={() => setShowLangMenu(!showLangMenu)}
-                className="p-2.5 bg-[var(--legal-accent)]/80 text-[var(--legal-black)] rounded-2xl hover:bg-[var(--legal-black)] hover:text-[var(--legal-white)] transition-all shadow-sm flex items-center gap-2"
+                className="p-1.5 sm:p-2.5 bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white rounded-xl sm:rounded-2xl hover:bg-slate-900 dark:hover:bg-white hover:text-white dark:hover:text-black transition-all shadow-sm flex items-center gap-1.5 border border-slate-200 dark:border-white/5"
                 title="Switch Language"
               >
-                <span>{ICONS.GLOBE}</span>
-                <span className="text-[10px] font-black uppercase">{lang}</span>
+                <span className="scale-[0.8] sm:scale-100">{ICONS.GLOBE}</span>
+                <span className="text-[8px] sm:text-[10px] font-black uppercase">{lang}</span>
               </button>
 
               {showLangMenu && (
@@ -139,10 +139,10 @@ const App: React.FC = () => {
             {/* Premium Circular Theme Toggle */}
             <button
               onClick={cycleTheme}
-              className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 shadow-sm border border-transparent hover:shadow-md hover:scale-105 active:scale-95 ${theme === 'DARK' ? 'bg-slate-800 text-yellow-400 border-slate-700/50' : 'bg-white text-orange-500 border-slate-200'}`}
+              className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-500 shadow-sm border border-transparent hover:shadow-md hover:scale-105 active:scale-95 ${theme === 'DARK' ? 'bg-slate-800 text-yellow-400 border-slate-700/50' : 'bg-white text-orange-500 border-slate-200'}`}
               title="Toggle Theme"
             >
-              <div className={`transform transition-transform duration-500 ${theme === 'DARK' ? 'rotate-180' : 'rotate-0'}`}>
+              <div className={`transform transition-transform duration-500 scale-[0.8] sm:scale-100 ${theme === 'DARK' ? 'rotate-180' : 'rotate-0'}`}>
                 {theme === 'DARK' ? (
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                 ) : (
@@ -154,10 +154,10 @@ const App: React.FC = () => {
             <div className="relative">
               <button
                 onClick={() => setShowLogoutConfirm(!showLogoutConfirm)}
-                className={`p-2 rounded-2xl transition-all shadow-sm ${showLogoutConfirm ? 'bg-red-50 text-red-500' : 'bg-[var(--legal-accent)]/80 text-[var(--legal-black)] hover:bg-red-50 hover:text-red-500'}`}
+                className={`p-1.5 rounded-lg sm:p-2 sm:rounded-xl transition-all shadow-sm ${showLogoutConfirm ? 'bg-red-50 text-red-500' : 'bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white border border-slate-200 dark:border-white/5 hover:bg-red-50 hover:text-red-500'}`}
                 title="Logout"
               >
-                <div className="scale-75">{ICONS.LOGOUT}</div>
+                <div className="scale-[0.5] sm:scale-75">{ICONS.LOGOUT}</div>
               </button>
 
               {/* Custom Logout Confirmation Popover */}
@@ -188,22 +188,22 @@ const App: React.FC = () => {
           </div>
         </div>
 
-        {/* Floating Mode Selector - Only Show if Professional and NOT listening */}
+        {/* Floating Mode Selector */}
         {userRole === 'PROFESSIONAL' && !isListening && (
-          <div className="flex justify-center pb-4 px-6">
-            <div className="flex bg-[var(--legal-accent)] p-1.5 rounded-[1.5rem] w-full sm:w-auto overflow-x-auto no-scrollbar">
+          <div className="flex justify-center pb-3 px-4 sm:px-6">
+            <div className="flex bg-slate-100 dark:bg-white/5 p-1 rounded-xl sm:rounded-[1.5rem] w-full sm:w-auto overflow-x-auto no-scrollbar border border-slate-200 dark:border-white/5">
               <button
                 onClick={() => setMode('SAHAYAK')}
-                className={`flex-1 sm:flex-none flex items-center justify-center space-x-3 px-6 sm:px-8 py-3 text-[10px] font-black uppercase transition-all rounded-[1.2rem] ${mode === 'SAHAYAK' ? 'bg-[var(--legal-white)] text-[var(--legal-black)] shadow-lg' : 'opacity-50 hover:opacity-100'}`}
+                className={`flex-1 sm:flex-none flex items-center justify-center space-x-2 sm:space-x-3 px-4 sm:px-8 py-2 sm:py-3 text-[9px] sm:text-[10px] font-black uppercase transition-all rounded-lg sm:rounded-[1.2rem] ${mode === 'SAHAYAK' ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-[var(--legal-gold)] shadow-md' : 'opacity-50 hover:opacity-100'}`}
               >
-                <span>{ICONS.USER_VOICE}</span>
+                <span className="scale-90 sm:scale-100">{ICONS.USER_VOICE}</span>
                 <span className="whitespace-nowrap">{t.portal_citizen}</span>
               </button>
               <button
                 onClick={() => setMode('EXPERT')}
-                className={`flex-1 sm:flex-none flex items-center justify-center space-x-3 px-6 sm:px-8 py-3 text-[10px] font-black uppercase transition-all rounded-[1.2rem] ${mode === 'EXPERT' ? 'bg-[var(--legal-white)] text-[var(--legal-black)] shadow-lg' : 'opacity-50 hover:opacity-100'}`}
+                className={`flex-1 sm:flex-none flex items-center justify-center space-x-2 sm:space-x-3 px-4 sm:px-8 py-2 sm:py-3 text-[9px] sm:text-[10px] font-black uppercase transition-all rounded-lg sm:rounded-[1.2rem] ${mode === 'EXPERT' ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-[var(--legal-gold)] shadow-md' : 'opacity-50 hover:opacity-100'}`}
               >
-                <span>{ICONS.GAVEL}</span>
+                <span className="scale-90 sm:scale-100">{ICONS.GAVEL}</span>
                 <span className="whitespace-nowrap">{t.portal_expert}</span>
               </button>
             </div>
@@ -218,6 +218,7 @@ const App: React.FC = () => {
           <div style={{ display: mode === 'SAHAYAK' ? 'block' : 'none', height: '100%' }}>
             <SahayakMode
               language={lang}
+              theme={theme}
               userKey={userKey}
               onListeningStateChange={setIsListening}
             />
