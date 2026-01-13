@@ -21,9 +21,12 @@ const saveUserToDB = (mobile: string, role: string, userData: any) => {
 };
 
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
-    const [activeTab, setActiveTab] = useState<'CITIZEN' | 'PROFESSIONAL'>('CITIZEN');
+    // Layout State
     const [view, setView] = useState<'SELECTION' | 'AUTH'>('SELECTION');
-    const [isRegistering, setIsRegistering] = useState(false); // Toggle between Login/Register
+    const [activeTab, setActiveTab] = useState<'CITIZEN' | 'PROFESSIONAL' | null>(null);
+    const [isRegistering, setIsRegistering] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     // Form States
     const [mobile, setMobile] = useState('');
@@ -218,18 +221,21 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     const userList = Object.keys(userDB).map(key => ({ key, ...userDB[key] }));
 
     return (
-        <div className="min-h-screen bg-[#0f172a] relative overflow-y-auto overflow-x-hidden flex flex-col items-center justify-start pt-6 pb-64 md:pt-20 px-4 md:px-8 custom-scrollbar">
+        <div className="min-h-screen bg-[#0f172a] relative overflow-y-auto overflow-x-hidden flex flex-col items-center justify-center md:justify-start pt-2 pb-20 md:pt-20 md:pb-40 px-4 md:px-8 custom-scrollbar">
 
-            {/* PROFESSIONAL DARK BACKGROUND */}
-            <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-[#020617]">
-                {/* Subtle static accents */}
-                <div className="absolute top-[-10%] left-[-10%] w-[800px] h-[800px] bg-blue-900/10 rounded-full blur-[120px]"></div>
-                <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-slate-900/20 rounded-full blur-[100px]"></div>
+            {/* PREMIUM SOLID WHITE BACKGROUND */}
+            <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-white">
+                {/* Subtle Ambient Light - Kept minimal for depth */}
+                <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-slate-50 rounded-full blur-[100px] opacity-50"></div>
+                <div className="absolute bottom-[-20%] right-[-10%] w-[1000px] h-[1000px] bg-slate-50 rounded-full blur-[120px] opacity-50"></div>
 
-                {/* Static Dot Grid */}
-                <div className="absolute inset-0 opacity-[0.05]"
+                {/* Gold Accent Glow in Center - Very subtle */}
+                <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[var(--legal-gold)]/5 rounded-full blur-[120px]"></div>
+
+                {/* Adaptive Dot Grid - Light Slate for clean visibility */}
+                <div className="absolute inset-0 opacity-[0.4]"
                     style={{
-                        backgroundImage: 'radial-gradient(var(--legal-gold) 0.8px, transparent 0.8px)',
+                        backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)',
                         backgroundSize: '32px 32px'
                     }}>
                 </div>
@@ -250,9 +256,9 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             {/* Notification layer */}
             <div className={`fixed top-8 left-1/2 -translate-x-1/2 z-[100] transition-all duration-300 ${notification ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}`}>
                 {notification && (
-                    <div className={`px-8 py-4 rounded-2xl shadow-2xl flex items-center space-x-4 backdrop-blur-xl border ${notification.type === 'error' ? 'bg-red-500/80 text-white border-red-400/50' :
-                        notification.type === 'success' ? 'bg-emerald-500/80 text-white border-emerald-400/50' :
-                            'bg-slate-800/80 text-white border-slate-700/50'
+                    <div className={`px-8 py-4 rounded-2xl shadow-2xl flex items-center space-x-4 backdrop-blur-xl border ${notification.type === 'error' ? 'bg-red-600/90 text-white border-red-500/50' :
+                        notification.type === 'success' ? 'bg-zinc-100/90 text-black border-white/50' :
+                            'bg-zinc-800/90 text-white border-zinc-700/50'
                         }`}>
                         <span className="text-xl">
                             {notification.type === 'error' ? '⚠️' : notification.type === 'success' ? '✅' : 'ℹ️'}
@@ -263,21 +269,21 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             </div>
 
             {/* MAIN CONTENT AREA */}
-            <div className="relative z-10 w-full max-w-5xl flex flex-col items-center gap-10 md:gap-16 mb-20 animate-fade-in">
+            <div className="relative z-10 w-full max-w-5xl flex flex-col items-center gap-6 md:gap-10 mb-10 animate-fade-in">
 
                 {/* BRANDING - Visible on Landing & Selection, Hidden on Auth */}
                 {view !== 'AUTH' && (
                     <div className="text-center space-y-2 md:space-y-3">
-                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 border border-white/10 shadow-2xl mb-4 group hover:scale-105 transition-transform duration-500">
-                            <div className="text-2xl md:text-4xl text-[var(--legal-gold)] drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]">
+                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-white border border-slate-200 shadow-xl mb-4 group hover:scale-105 transition-transform duration-500">
+                            <div className="text-2xl md:text-4xl text-[var(--legal-gold)] drop-shadow-sm">
                                 {ICONS.SCALE}
                             </div>
                         </div>
                         <div>
-                            <h1 className="text-3xl md:text-6xl font-black tracking-tighter text-white leading-tight">
+                            <h1 className="text-3xl md:text-6xl font-black tracking-tighter text-slate-900 leading-tight">
                                 NYAAY <span className="text-[var(--legal-gold)]">SAHAYAK</span>
                             </h1>
-                            <p className="text-[9px] md:text-xs font-bold text-slate-400 uppercase tracking-[0.4em] mt-2 md:mt-3 opacity-60">
+                            <p className="text-[9px] md:text-xs font-bold text-slate-500 uppercase tracking-[0.4em] mt-2 md:mt-3 opacity-80">
                                 Advanced AI Legal Intelligence
                             </p>
                         </div>
@@ -285,53 +291,82 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                 )}
 
                 {view === 'SELECTION' ? (
-                    <div className="w-full flex flex-col md:flex-row justify-center gap-6 px-4">
-                        {/* Citizen Portal Card */}
-                        <button
-                            onClick={() => { setActiveTab('CITIZEN'); setView('AUTH'); setIsRegistering(false); }}
-                            className="group relative flex-1 max-w-xs mx-auto bg-white/[0.04] backdrop-blur-xl border border-white/10 p-6 rounded-2xl hover:bg-white/[0.08] hover:border-emerald-500/30 transition-all duration-300 shadow-2xl overflow-hidden hover:-translate-y-1"
-                        >
-                            <div className="relative z-10 flex flex-col items-center text-center gap-4">
-                                <div className="w-20 h-14 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-2xl text-emerald-400 border border-emerald-500/20 group-hover:bg-emerald-500/20 transition-all duration-300">
-                                    {ICONS.USER_VOICE}
+                    <>
+                        <div className="w-full flex flex-col md:flex-row justify-center gap-6 px-4">
+                            {/* Citizen Portal Card */}
+                            <button
+                                onClick={() => { setActiveTab('CITIZEN'); setView('AUTH'); setIsRegistering(false); }}
+                                className="group relative flex-1 max-w-xs mx-auto bg-white/80 backdrop-blur-xl border border-slate-200 p-6 rounded-2xl hover:bg-white hover:border-black transition-all duration-300 shadow-xl hover:shadow-2xl overflow-hidden hover:-translate-y-1"
+                            >
+                                <div className="relative z-10 flex flex-col items-center text-center gap-4">
+                                    <div className="w-20 h-14 bg-slate-50 text-slate-900 rounded-2xl flex items-center justify-center text-2xl border border-slate-100 group-hover:scale-110 transition-all duration-300 shadow-inner">
+                                        {ICONS.USER_VOICE}
+                                    </div>
+                                    <div className="space-y-2">
+                                        <h3 className="text-lg font-black text-slate-900 uppercase tracking-tight">Citizen Portal</h3>
+                                        <p className="text-xs text-slate-500 font-medium leading-relaxed px-2">AI Legal Assistant, Case Roadmap, e-FIR, and Verified Legal Aid.</p>
+                                    </div>
+                                    <div className="w-full py-3 bg-slate-900 text-white rounded-xl text-[10px] font-black tracking-[0.2em] shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-3 group-hover:bg-black">
+                                        ENTER PORTAL <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                                    </div>
                                 </div>
-                                <div className="space-y-2">
-                                    <h3 className="text-lg font-black text-white uppercase tracking-tight">Citizen Portal</h3>
-                                    <p className="text-xs text-slate-400 font-medium leading-relaxed px-2">AI Legal Assistant, Case Roadmap, e-FIR, and Verified Legal Aid.</p>
-                                </div>
-                                <div className="w-full py-3 bg-emerald-600 rounded-xl text-[10px] font-black text-white tracking-[0.2em] shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-3">
-                                    ENTER PORTAL <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
-                                </div>
-                            </div>
-                        </button>
+                            </button>
 
-                        {/* Professional Portal Card */}
-                        <button
-                            onClick={() => { setActiveTab('PROFESSIONAL'); setView('AUTH'); setIsRegistering(false); }}
-                            className="group relative flex-1 max-w-xs mx-auto bg-white/[0.04] backdrop-blur-xl border border-white/10 p-6 rounded-2xl hover:bg-white/[0.08] hover:border-blue-500/30 transition-all duration-300 shadow-2xl overflow-hidden hover:-translate-y-1"
-                        >
-                            <div className="relative z-10 flex flex-col items-center text-center gap-4">
-                                <div className="w-20 h-14 bg-blue-500/10 rounded-2xl flex items-center justify-center text-2xl text-blue-400 border border-blue-500/20 group-hover:bg-blue-500/20 transition-all duration-300">
-                                    {ICONS.GAVEL}
+                            {/* Professional Portal Card */}
+                            <button
+                                onClick={() => { setActiveTab('PROFESSIONAL'); setView('AUTH'); setIsRegistering(false); }}
+                                className="group relative flex-1 max-w-xs mx-auto bg-white/80 backdrop-blur-xl border border-slate-200 p-6 rounded-2xl hover:bg-white hover:border-[var(--legal-gold)] transition-all duration-300 shadow-xl hover:shadow-2xl overflow-hidden hover:-translate-y-1"
+                            >
+                                <div className="relative z-10 flex flex-col items-center text-center gap-4">
+                                    <div className="w-20 h-14 bg-[var(--legal-gold)] text-black rounded-2xl flex items-center justify-center text-2xl border border-[var(--legal-gold)]/20 group-hover:scale-110 transition-all duration-300 shadow-lg">
+                                        {ICONS.GAVEL}
+                                    </div>
+                                    <div className="space-y-2">
+                                        <h3 className="text-lg font-black text-slate-900 uppercase tracking-tight">Expert Portal</h3>
+                                        <p className="text-xs text-slate-500 font-medium leading-relaxed px-2">Dossier Management, Statutory AI Core, and Petition Drafting Tools.</p>
+                                    </div>
+                                    <div className="w-full py-3 bg-[var(--legal-gold)] text-black rounded-xl text-[10px] font-black tracking-[0.2em] shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-3 hover:bg-[#cda434]">
+                                        RESTRICTED ACCESS <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                                    </div>
                                 </div>
-                                <div className="space-y-2">
-                                    <h3 className="text-lg font-black text-white uppercase tracking-tight">Expert Portal</h3>
-                                    <p className="text-xs text-slate-400 font-medium leading-relaxed px-2">Dossier Management, Statutory AI Core, and Petition Drafting Tools.</p>
+                            </button>
+                        </div>
+                        {/* KEY FEATURES / STATS FOOTER */}
+                        <div className="hidden md:grid mt-10 w-full max-w-4xl grid-cols-4 gap-4 px-4 relative z-20">
+                            <div className="flex flex-col items-center gap-2 group cursor-default">
+                                <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-[var(--legal-gold)] group-hover:scale-110 group-hover:bg-white group-hover:border-[var(--legal-gold)] group-hover:shadow-md transition-all duration-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                                 </div>
-                                <div className="w-full py-3 bg-blue-600 rounded-xl text-[10px] font-black text-white tracking-[0.2em] shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-3">
-                                    RESTRICTED ACCESS <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
-                                </div>
+                                <span className="text-[10px] font-black tracking-widest uppercase text-slate-500 group-hover:text-slate-900 transition-colors text-center">Instant Analysis</span>
                             </div>
-                        </button>
-                    </div>
+                            <div className="flex flex-col items-center gap-2 group cursor-default">
+                                <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-[var(--legal-gold)] group-hover:scale-110 group-hover:bg-white group-hover:border-[var(--legal-gold)] group-hover:shadow-md transition-all duration-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" /></svg>
+                                </div>
+                                <span className="text-[10px] font-black tracking-widest uppercase text-slate-500 group-hover:text-slate-900 transition-colors text-center">Multilingual AI</span>
+                            </div>
+                            <div className="flex flex-col items-center gap-2 group cursor-default">
+                                <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-[var(--legal-gold)] group-hover:scale-110 group-hover:bg-white group-hover:border-[var(--legal-gold)] group-hover:shadow-md transition-all duration-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                </div>
+                                <span className="text-[10px] font-black tracking-widest uppercase text-slate-500 group-hover:text-slate-900 transition-colors text-center">24/7 Availability</span>
+                            </div>
+                            <div className="flex flex-col items-center gap-2 group cursor-default">
+                                <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-[var(--legal-gold)] group-hover:scale-110 group-hover:bg-white group-hover:border-[var(--legal-gold)] group-hover:shadow-md transition-all duration-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                </div>
+                                <span className="text-[10px] font-black tracking-widest uppercase text-slate-500 group-hover:text-slate-900 transition-colors text-center">Zero Latency</span>
+                            </div>
+                        </div>
+                    </>
                 ) : (
                     <div className="w-full max-w-md animate-scale-in">
-                        <div className="bg-slate-900/40 backdrop-blur-3xl rounded-[2.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.6)] overflow-hidden border border-white/10 flex flex-col">
-                            <div className="p-8 pb-6 text-center border-b border-white/5 relative bg-white/5">
+                        <div className="bg-white/90 backdrop-blur-2xl rounded-[2.5rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] overflow-hidden border border-white/50 flex flex-col">
+                            <div className="p-8 pb-6 text-center border-b border-slate-100 relative bg-slate-50/50">
                                 {!showOtp && (
                                     <button
                                         onClick={() => { setView('SELECTION'); resetForm(); }}
-                                        className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-all p-2.5 hover:bg-white/10 rounded-xl border border-transparent hover:border-white/20 shadow-sm hover:shadow-md group"
+                                        className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-900 transition-all p-2.5 hover:bg-white rounded-xl border border-transparent hover:border-slate-200 shadow-sm hover:shadow-md group"
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -342,7 +377,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                                     <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--legal-gold)]">
                                         {activeTab === 'PROFESSIONAL' ? "Expert Portal" : "Citizen Portal"}
                                     </h2>
-                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest opacity-60">Secure Authentication</p>
+                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest opacity-80">Secure Authentication</p>
                                 </div>
                             </div>
 
@@ -350,11 +385,11 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                                 {showOtp ? (
                                     <form onSubmit={handleVerifyOtp} className="space-y-6">
                                         <div className="text-center space-y-2">
-                                            <p className="text-lg font-black text-white tracking-tight">Verify Secure Code</p>
-                                            <p className="text-xs font-medium text-slate-400">Identity check for <span className="text-white font-bold">{mobile}</span></p>
+                                            <p className="text-lg font-black text-slate-900 tracking-tight">Verify Secure Code</p>
+                                            <p className="text-xs font-medium text-slate-500">Identity check for <span className="text-slate-900 font-bold">{mobile}</span></p>
                                             <div className="pt-2">
                                                 {otpTimer > 0 ? (
-                                                    <span className={`text-[10px] font-black px-4 py-1.5 rounded-full ${otpTimer > 10 ? 'bg-white/5 text-slate-400' : 'bg-red-500/10 text-red-400'}`}>
+                                                    <span className={`text-[10px] font-black px-4 py-1.5 rounded-full ${otpTimer > 10 ? 'bg-slate-100 text-slate-500' : 'bg-red-50 text-red-500'}`}>
                                                         AUTODESTRUCT IN 00:{otpTimer.toString().padStart(2, '0')}
                                                     </span>
                                                 ) : (
@@ -372,7 +407,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                                                     value={otp}
                                                     onChange={(e) => setOtp(e.target.value)}
                                                     autoComplete="one-time-code"
-                                                    className="w-56 text-center text-5xl font-black tracking-[0.5em] py-6 bg-white/5 border-2 border-white/10 rounded-3xl outline-none focus:border-[var(--legal-gold)] focus:ring-8 focus:ring-[var(--legal-gold)]/5 transition-all text-white shadow-inner"
+                                                    className="w-56 text-center text-5xl font-black tracking-[0.5em] py-6 bg-slate-50 border-2 border-slate-200 rounded-3xl outline-none focus:border-[var(--legal-gold)] focus:ring-0 focus:shadow-[0_0_0_4px_rgba(212,175,55,0.1)] transition-all text-slate-900 shadow-inner"
                                                     placeholder="0000"
                                                     autoFocus
                                                 />
@@ -392,24 +427,24 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                                     <form onSubmit={isRegistering ? handleRegisterStep1 : handleLoginStep1} className="space-y-3">
                                         {/* COMPACT LOGO FOR CARD */}
                                         <div className="flex justify-center pb-2">
-                                            <div className="inline-flex items-center justify-center w-16 h-12 rounded-xl bg-white/5 border border-white/10 shadow-lg group hover:scale-105 transition-transform duration-500">
-                                                <div className="text-2xl text-[var(--legal-gold)] drop-shadow-[0_0_10px_rgba(212,175,55,0.3)]">
+                                            <div className="inline-flex items-center justify-center w-16 h-12 rounded-xl bg-slate-50 border border-slate-100 shadow-sm group hover:scale-105 transition-transform duration-500">
+                                                <div className="text-2xl text-[var(--legal-gold)] drop-shadow-sm">
                                                     {ICONS.SCALE}
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div className="flex items-center gap-4 mb-2">
-                                            <div className="flex-1 h-px bg-white/5"></div>
+                                            <div className="flex-1 h-px bg-slate-200"></div>
                                             <h3 className="text-[9px] font-black uppercase text-slate-400 tracking-[0.3em]">{isRegistering ? "Register Identity" : "Member Login"}</h3>
-                                            <div className="flex-1 h-px bg-white/5"></div>
+                                            <div className="flex-1 h-px bg-slate-200"></div>
                                         </div>
 
                                         {isRegistering && (
                                             <div className={`space-y-3 animate-fade-in ${activeTab === 'PROFESSIONAL' ? 'grid grid-cols-2 gap-3 space-y-0' : ''}`}>
                                                 <div className="relative group col-span-1">
-                                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-[var(--legal-gold)] transition-colors">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                                    <div className="absolute left-4 top-0 bottom-0 flex items-center justify-center text-slate-400 group-focus-within:text-[var(--legal-gold)] transition-colors">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                                                     </div>
                                                     <input
                                                         type="text"
@@ -417,14 +452,14 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                                                         onChange={(e) => setName(e.target.value)}
                                                         placeholder="Full Name"
                                                         autoComplete="name"
-                                                        className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-xs font-bold text-white placeholder:text-slate-600 focus:outline-none focus:border-[var(--legal-gold)] focus:ring-4 focus:ring-[var(--legal-gold)]/5 transition-all"
+                                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-12 pr-4 py-3.5 text-xs font-bold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[var(--legal-gold)] focus:ring-0 focus:shadow-[0_0_0_4px_rgba(212,175,55,0.1)] transition-all"
                                                         required
                                                     />
                                                 </div>
                                                 {activeTab === 'PROFESSIONAL' && (
                                                     <div className="relative group col-span-1">
-                                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-[var(--legal-gold)] transition-colors">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                                        <div className="absolute left-4 top-0 bottom-0 flex items-center justify-center text-slate-400 group-focus-within:text-[var(--legal-gold)] transition-colors">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                                         </div>
                                                         <input
                                                             type="number"
@@ -432,7 +467,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                                                             onChange={(e) => setAge(e.target.value)}
                                                             placeholder="Age (18+)"
                                                             autoComplete="off"
-                                                            className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-xs font-bold text-white placeholder:text-slate-600 focus:outline-none focus:border-[var(--legal-gold)] focus:ring-4 focus:ring-[var(--legal-gold)]/5 transition-all"
+                                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-12 pr-4 py-3.5 text-xs font-bold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[var(--legal-gold)] focus:ring-0 focus:shadow-[0_0_0_4px_rgba(212,175,55,0.1)] transition-all"
                                                             required
                                                         />
                                                     </div>
@@ -441,8 +476,8 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                                         )}
 
                                         <div className="relative group">
-                                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-[var(--legal-gold)] transition-colors">
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                                            <div className="absolute left-4 top-0 bottom-0 flex items-center justify-center text-slate-400 group-focus-within:text-[var(--legal-gold)] transition-colors">
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                                             </div>
                                             <input
                                                 type="tel"
@@ -450,40 +485,62 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                                                 onChange={(e) => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))}
                                                 placeholder="Mobile Number"
                                                 autoComplete="tel"
-                                                className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-xs font-bold text-white placeholder:text-slate-600 focus:outline-none focus:border-[var(--legal-gold)] focus:ring-4 focus:ring-[var(--legal-gold)]/5 transition-all"
+                                                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-12 pr-4 py-3.5 text-xs font-bold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[var(--legal-gold)] focus:ring-0 focus:shadow-[0_0_0_4px_rgba(212,175,55,0.1)] transition-all"
                                                 required
                                             />
                                         </div>
 
                                         <div className="relative group">
-                                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-[var(--legal-gold)] transition-colors">
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                                            <div className="absolute left-4 top-0 bottom-0 flex items-center justify-center text-slate-400 group-focus-within:text-[var(--legal-gold)] transition-colors">
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                                             </div>
                                             <input
-                                                type="password"
+                                                type={showPassword ? "text" : "password"}
                                                 value={password}
                                                 onChange={(e) => setPassword(e.target.value)}
                                                 placeholder="Password"
                                                 autoComplete="new-password"
-                                                className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-xs font-bold text-white placeholder:text-slate-600 focus:outline-none focus:border-[var(--legal-gold)] focus:ring-4 focus:ring-[var(--legal-gold)]/5 transition-all"
+                                                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-12 pr-12 py-3.5 text-xs font-bold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[var(--legal-gold)] focus:ring-0 focus:shadow-[0_0_0_4px_rgba(212,175,55,0.1)] transition-all"
                                                 required
                                             />
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowPassword(!showPassword)}
+                                                className="absolute right-4 top-0 bottom-0 flex items-center justify-center text-slate-400 hover:text-slate-600 focus:outline-none transition-colors"
+                                            >
+                                                {showPassword ? (
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>
+                                                ) : (
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                                                )}
+                                            </button>
                                         </div>
 
                                         {isRegistering && (
                                             <div className="relative group">
-                                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-[var(--legal-gold)] transition-colors">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                                                <div className="absolute left-4 top-0 bottom-0 flex items-center justify-center text-slate-400 group-focus-within:text-[var(--legal-gold)] transition-colors">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                                                 </div>
                                                 <input
-                                                    type="password"
+                                                    type={showConfirmPassword ? "text" : "password"}
                                                     value={confirmPassword}
                                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                                     placeholder="Confirm Password"
                                                     autoComplete="new-password"
-                                                    className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-xs font-bold text-white placeholder:text-slate-600 focus:outline-none focus:border-[var(--legal-gold)] focus:ring-4 focus:ring-[var(--legal-gold)]/5 transition-all"
+                                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-12 pr-12 py-3.5 text-xs font-bold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[var(--legal-gold)] focus:ring-0 focus:shadow-[0_0_0_4px_rgba(212,175,55,0.1)] transition-all"
                                                     required
                                                 />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                                    className="absolute right-4 top-0 bottom-0 flex items-center justify-center text-slate-400 hover:text-slate-600 focus:outline-none transition-colors"
+                                                >
+                                                    {showConfirmPassword ? (
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>
+                                                    ) : (
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                                                    )}
+                                                </button>
                                             </div>
                                         )}
 
@@ -508,7 +565,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                                     </form>
                                 )}
                             </div>
-                            <div className="bg-white/5 p-4 border-t border-white/5 text-center">
+                            <div className="bg-slate-50 p-4 border-t border-slate-100 text-center">
                                 <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest flex items-center justify-center gap-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                                     End-To-End Encryption
@@ -519,9 +576,9 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                 )}
 
                 {/* Fixed Bottom Stats (Static, No Marquee) */}
-                <div className="fixed bottom-0 left-0 right-0 py-4 pb-6 bg-[#0f172a]/80 backdrop-blur-lg border-t border-white/5 z-50 flex justify-center">
+                <div className="fixed bottom-0 left-0 right-0 py-4 pb-6 bg-white/95 backdrop-blur-lg border-t border-slate-200 z-50 flex justify-center shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.05)]">
                     <div className="flex flex-wrap justify-center gap-4 md:gap-8 text-[9px] font-black text-slate-500 uppercase tracking-widest px-4">
-                        <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> System Online</span>
+                        <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[var(--legal-gold)] animate-pulse"></span> System Online</span>
                         <span className="flex items-center gap-1.5 hidden sm:flex">⚖️ 12k+ Precedents</span>
                         <span className="flex items-center gap-1.5 hidden sm:flex">👨‍⚖️ 500+ Experts</span>
                         <span className="flex items-center gap-1.5">🛡️ Sovereign Encrypted</span>
@@ -532,79 +589,85 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             {/* Admin Identity Inspector Modal */}
             <button
                 onClick={() => setShowAdmin(!showAdmin)}
-                className="fixed bottom-4 right-4 p-3 bg-white/5 text-white/10 text-[10px] font-black rounded-full hover:bg-white/10 hover:text-white transition-all z-50 opacity-0 hover:opacity-100"
+                className="fixed bottom-4 right-4 p-3 bg-slate-200 text-slate-400 text-[10px] font-black rounded-full hover:bg-slate-900 hover:text-white transition-all z-50 opacity-0 hover:opacity-100"
             >
                 SYS
             </button>
 
-            {showAdmin && (
-                <div className="fixed inset-0 z-[200] bg-[#0c0c0c]/90 backdrop-blur-md flex items-center justify-center p-4 lg:p-12 animate-fade-in">
-                    <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-4xl h-full max-h-[85vh] flex flex-col overflow-hidden">
-                        <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                            <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Identity Inspector</h3>
-                            <button onClick={() => setShowAdmin(false)} className="w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center hover:bg-slate-300 transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-                            </button>
-                        </div>
-                        <div className="p-8 overflow-y-auto space-y-4 bg-white custom-scrollbar flex-1">
-                            {userList.length === 0 ? (
-                                <p className="text-center text-slate-400 py-20 font-bold uppercase tracking-widest text-xs">No Identities Found</p>
-                            ) : (
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    {userList.map((user: any) => (
-                                        <div key={user.key} className="bg-slate-50 p-6 rounded-3xl border border-slate-100">
-                                            <div className="flex justify-between items-start mb-4">
-                                                <span className={`text-[9px] font-black px-3 py-1.5 rounded-full uppercase ${user.role === 'PROFESSIONAL' ? 'bg-slate-900 text-[var(--legal-gold)]' : 'bg-green-600 text-white'}`}>
-                                                    {user.role}
-                                                </span>
-                                            </div>
-                                            <div className="space-y-4">
-                                                <div>
-                                                    <p className='text-[10px] font-black text-slate-300 uppercase mb-1'>Identity Holder</p>
-                                                    <p className='text-sm font-black text-slate-800'>{user.name}</p>
+            {
+                showAdmin && (
+                    <div className="fixed inset-0 z-[200] bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4 lg:p-12 animate-fade-in">
+                        <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-4xl h-full max-h-[85vh] flex flex-col overflow-hidden border border-white/40">
+                            <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                                <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Identity Inspector</h3>
+                                <button onClick={() => setShowAdmin(false)} className="w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center text-slate-500 hover:text-white hover:bg-slate-900 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                                </button>
+                            </div>
+                            <div className="p-8 overflow-y-auto space-y-4 bg-white custom-scrollbar flex-1">
+                                {userList.length === 0 ? (
+                                    <p className="text-center text-slate-400 py-20 font-bold uppercase tracking-widest text-xs">No Identities Found</p>
+                                ) : (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        {userList.map((user: any) => (
+                                            <div key={user.key} className="bg-slate-50 p-6 rounded-3xl border border-slate-100">
+                                                <div className="flex justify-between items-start mb-4">
+                                                    <span className={`text-[9px] font-black px-3 py-1.5 rounded-full uppercase ${user.role === 'PROFESSIONAL' ? 'bg-slate-900 text-[var(--legal-gold)]' : 'bg-white text-slate-900 border border-slate-200'}`}>
+                                                        {user.role}
+                                                    </span>
                                                 </div>
-                                                <div className="grid grid-cols-2 gap-4">
+                                                <div className="space-y-4">
                                                     <div>
-                                                        <p className='text-[10px] font-black text-slate-300 uppercase mb-1'>Reference</p>
-                                                        <p className='text-xs font-bold text-slate-600'>{user.mobile}</p>
+                                                        <p className='text-[10px] font-black text-slate-400 uppercase mb-1'>Identity Holder</p>
+                                                        <p className='text-sm font-black text-slate-900'>{user.name}</p>
                                                     </div>
-                                                    <div>
-                                                        <p className='text-[10px] font-black text-slate-300 uppercase mb-1'>Secret</p>
-                                                        <p className='text-xs font-bold text-slate-600'>{user.password}</p>
+                                                    <div className="grid grid-cols-2 gap-4">
+                                                        <div>
+                                                            <p className='text-[10px] font-black text-slate-400 uppercase mb-1'>Reference</p>
+                                                            <p className='text-xs font-bold text-slate-600'>{user.mobile}</p>
+                                                        </div>
+                                                        <div>
+                                                            <p className='text-[10px] font-black text-slate-400 uppercase mb-1'>Secret</p>
+                                                            <p className='text-xs font-bold text-slate-600'>{user.password}</p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )
+            }
 
-            {systemAlert?.show && (
-                <div className="fixed inset-0 z-[300] bg-black/40 backdrop-blur-sm flex items-start justify-center pt-20 animate-fade-in p-4">
-                    <div className="bg-white rounded-[2.5rem] shadow-2xl p-8 max-w-sm w-full animate-scale-in">
-                        <div className="flex items-center gap-4 mb-6">
-                            <div className="w-12 h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-xl text-white">💬</div>
-                            <h3 className="text-lg font-black text-slate-900 uppercase tracking-tight">Transmission</h3>
+            {
+                systemAlert?.show && (
+                    <div className="fixed inset-0 z-[300] bg-black/40 backdrop-blur-sm flex items-start justify-center pt-20 animate-fade-in p-4">
+                        <div className="bg-white rounded-[2.5rem] shadow-2xl p-8 max-w-sm w-full animate-scale-in">
+                            <div className="flex items-center gap-4 mb-6">
+                                <div className="w-12 h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-xl text-white">💬</div>
+                                <h3 className="text-lg font-black text-slate-900 uppercase tracking-tight">Transmission</h3>
+                            </div>
+                            <p className="text-sm text-slate-600 font-bold bg-slate-50 p-6 rounded-2xl border border-slate-100 mb-8 whitespace-pre-wrap">{systemAlert.message}</p>
+                            <button onClick={() => setSystemAlert(null)} className="w-full py-4 bg-slate-900 text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-black transition-all">Dismiss Signal</button>
                         </div>
-                        <p className="text-sm text-slate-600 font-bold bg-slate-50 p-6 rounded-2xl border border-slate-100 mb-8 whitespace-pre-wrap">{systemAlert.message}</p>
-                        <button onClick={() => setSystemAlert(null)} className="w-full py-4 bg-slate-900 text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-black transition-all">Dismiss Signal</button>
                     </div>
-                </div>
-            )}
+                )
+            }
 
-            {showLawyerReg && (
-                <div className="fixed inset-0 z-[400] bg-[#0c0c0c] overflow-y-auto animate-fade-in">
-                    <LawyerRegistration onBack={() => {
-                        const userKey = `PROFESSIONAL_${mobile}`;
-                        onLogin('PROFESSIONAL', userKey);
-                    }} />
-                </div>
-            )}
-        </div>
+            {
+                showLawyerReg && (
+                    <div className="fixed inset-0 z-[400] bg-[#0c0c0c] overflow-y-auto animate-fade-in">
+                        <LawyerRegistration onBack={() => {
+                            const userKey = `PROFESSIONAL_${mobile}`;
+                            onLogin('PROFESSIONAL', userKey);
+                        }} />
+                    </div>
+                )
+            }
+        </div >
     );
 };
 
