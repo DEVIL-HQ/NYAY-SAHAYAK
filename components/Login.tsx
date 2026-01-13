@@ -296,7 +296,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                             {/* Citizen Portal Card */}
                             <button
                                 onClick={() => { setActiveTab('CITIZEN'); setView('AUTH'); setIsRegistering(false); }}
-                                className="group relative flex-1 max-w-xs mx-auto bg-white/80 backdrop-blur-xl border border-slate-200 p-6 rounded-2xl hover:bg-white hover:border-black transition-all duration-300 shadow-xl hover:shadow-2xl overflow-hidden hover:-translate-y-1"
+                                className="group relative flex-1 max-w-sm mx-auto bg-white/80 backdrop-blur-xl border border-slate-200 p-6 rounded-2xl hover:bg-white hover:border-black transition-all duration-300 shadow-xl hover:shadow-2xl overflow-hidden hover:-translate-y-1"
                             >
                                 <div className="relative z-10 flex flex-col items-center text-center gap-4">
                                     <div className="w-20 h-14 bg-slate-50 text-slate-900 rounded-2xl flex items-center justify-center text-2xl border border-slate-100 group-hover:scale-110 transition-all duration-300 shadow-inner">
@@ -315,7 +315,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                             {/* Professional Portal Card */}
                             <button
                                 onClick={() => { setActiveTab('PROFESSIONAL'); setView('AUTH'); setIsRegistering(false); }}
-                                className="group relative flex-1 max-w-xs mx-auto bg-white/80 backdrop-blur-xl border border-slate-200 p-6 rounded-2xl hover:bg-white hover:border-[var(--legal-gold)] transition-all duration-300 shadow-xl hover:shadow-2xl overflow-hidden hover:-translate-y-1"
+                                className="group relative flex-1 max-w-sm mx-auto bg-white/80 backdrop-blur-xl border border-slate-200 p-6 rounded-2xl hover:bg-white hover:border-[var(--legal-gold)] transition-all duration-300 shadow-xl hover:shadow-2xl overflow-hidden hover:-translate-y-1"
                             >
                                 <div className="relative z-10 flex flex-col items-center text-center gap-4">
                                     <div className="w-20 h-14 bg-[var(--legal-gold)] text-black rounded-2xl flex items-center justify-center text-2xl border border-[var(--legal-gold)]/20 group-hover:scale-110 transition-all duration-300 shadow-lg">
